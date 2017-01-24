@@ -1,13 +1,5 @@
-### the gbm auto grid ....
-
-wd <- getwd()
-setwd(wd)
-# set variables, these will turn into funtion inputs
-train_file <- "path_to_train_file"
-# start lifting!
-# import train and test !!
-df1 <- h2o.importFile(path = normalizePath(train_file))
-
+### Train gbm models
+#==================================================================
 start.gbm <- function(train,
                           y_name,
                           y_type,
@@ -94,9 +86,3 @@ start.gbm <- function(train,
 
 
 }
-
-
-# test the function call..
-gbm <- start.gbm(train = df1,
-                       y_name = "target",
-                       y_type = "discrete")
