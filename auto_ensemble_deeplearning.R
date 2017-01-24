@@ -1,58 +1,6 @@
-# ensemble functions in prep for R package...
-# remember to make some kind of VIS, especially before putting all theextras together.
-
-# load libraries
-library(h2o)
-library(cvAUC)
-library(Metrics)
-library(h2oEnsemble)
-
-
-# start decent size (more ram than needed for this)
-h2o.shutdown(prompt = FALSE)
-h2o.init(nthreads=8, max_mem_size="16G")
-h2o.removeAll()
-
-# extra
-wd <- "/Users/grad/Desktop/auto"
-setwd(wd)
-
+# Train Deep learning models
 #===============================================================================
-# this will be some kind of prep function
-# set variables, these will turn into funtion inputs
-train_file <- "/Users/Andy/Desktop/numerai/1-11-17/numerai_training_data.csv"
-test_file <- "/Users/Andy/Desktop/numerai/1-11-17/numerai_tournament_data.csv"
-total_max_runtime_secs = 60
-percent_train_holdout <- 0.1
-y_name <- "target"
-y_type <- "discrete" # or "continous"
-grid_strategy <- "RandomDiscrete"
-
-# start lifting!
-# import train and test !!
-df1 <- h2o.importFile(path = normalizePath(train_file))
-test<- h2o.importFile(path = normalizePath(test_file))
-
-
-
-
-
-### just to test
-wd = getwd()
-deeplearning_runtime_secs = 20
-deeplearning_stopping_rounds = 10
-deeplearning_stopping_tolerance = 1e-5
-deeplearning_adaptive_rate = TRUE
-seeds = c(1234, 4321, 3245, 5432)
-y_name = y_name
-y_type = "discrete"
-grid_strategy = grid_strategy
-
-
-
-#===============================================================================
-# start the auto function for deepleraning
-autotrain.deeplearning <- function(train,
+start.deeplearning <- function(train,
                                    y_name,
                                    y_type,
                                    wd = getwd(),
@@ -145,14 +93,3 @@ dl_model_files <- sapply(dl_grid@model_ids, function(m) h2o.saveModel(h2o.getMod
 cat(paste("Deep Learning Models Saved To:\n",dl_path))
 
 }
-
-
-# test the function call..
-autotrain.deeplearning(train = df1,
-                       y_name = "target",
-                       y_type = "discrete")
-
-
-
-
-
