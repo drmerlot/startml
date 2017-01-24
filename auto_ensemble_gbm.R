@@ -1,32 +1,14 @@
 ### the gbm auto grid ....
-# still have to deal with ntree, and epochs for dl.
 
-# think about max models...
-# max_models = 200,
-
-# temporary testing
-gbm_min_depth = 1
-gbm_max_depth = 7
-gbm_runtime_secs = 20
-gbm_stopping_rounds = 10
-gbm_stopping_tolerance = 1e-5
-seeds = c(1234, 4321, 3245, 5432)
-grid_strategy = "RandomDiscrete"
-percent_train_holdout = 0.1
-
-# reset
-# extra
-wd <- "/Users/Andy/Desktop/numerai/1-11-17"
+wd <- getwd()
 setwd(wd)
 # set variables, these will turn into funtion inputs
-train_file <- "/Users/Andy/Desktop/auto/numerai_training_data.csv"
+train_file <- "path_to_train_file"
 # start lifting!
 # import train and test !!
 df1 <- h2o.importFile(path = normalizePath(train_file))
 
-
-
-autotrain.gbm <- function(train,
+start.gbm <- function(train,
                           y_name,
                           y_type,
                           wd = getwd(),
@@ -115,13 +97,6 @@ autotrain.gbm <- function(train,
 
 
 # test the function call..
-gbm <- autotrain.gbm(train = df1,
+gbm <- start.gbm(train = df1,
                        y_name = "target",
                        y_type = "discrete")
-
-
-
-
-
-
-
