@@ -1,7 +1,8 @@
 ##############################
 #
-## h20 grid search for different model available in h2o.
+# h2o grid search for different model available in h2o.
 # Searches for, and saves models
+# needs to be completely restructured and edited
 #
 #############################
 
@@ -11,13 +12,7 @@
 #
 #######################
 
-#
-# set use of models by fitness threshold and
 
-library(cvAUC)
-library(h2o)
-library(Metrics)
-library(h2oEnsemble)
 
 # start decent size (more ram than needed for this)
 #h2o.init(nthreads=-1, max_mem_size="16G")
@@ -29,7 +24,7 @@ h2o.removeAll()
 #
 #######################
 
-wrappers_path <- wd
+wrappers_path <- getwd()
 
 # make number, performance / correlation threshold would be best..
 use_num <- 1
