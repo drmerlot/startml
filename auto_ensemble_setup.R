@@ -14,11 +14,11 @@ h2o.init(nthreads=2, max_mem_size="6G")
 h2o.removeAll()
 
 # extra
-wd <- "/Users/grad/Desktop/auto"
+wd <- ""
 setwd(wd)
 
-train_file <- "/Users/grad/Desktop/auto/numerai_training_data.csv"
-test_file <- "/Users/grad/Desktop/auto/numerai_tournament_data.csv"
+train_file <- ""
+test_file <- ""
 y_name <- "target"
 y_type <- "discrete" # or "continous"
 
@@ -31,6 +31,3 @@ autotrain.loaddata <- function(train_file) {
 
 # test
 df1 <- autotrain.loaddata(train_file)
-
-
-
