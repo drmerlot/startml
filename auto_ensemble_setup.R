@@ -17,13 +17,13 @@ h2o.removeAll()
 wd <- ""
 setwd(wd)
 
-train_file <- ""
+train_file <- "~/Desktop/auto/numerai_training_data.csv"
 test_file <- ""
 y_name <- "target"
 y_type <- "discrete" # or "continous"
 
 #========================================
-# the function
+# the load data function.
 autotrain.loaddata <- function(train_file) {
   df1 <- h2o.importFile(path = normalizePath(train_file))
   df1
@@ -31,3 +31,5 @@ autotrain.loaddata <- function(train_file) {
 
 # test
 df1 <- autotrain.loaddata(train_file)
+
+
