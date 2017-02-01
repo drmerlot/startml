@@ -1,6 +1,6 @@
 ### function to run all three ...
 #========================================================
-start.train <- function(train,
+start.autotrain <- function(train,
                     y_name,
                     y_type,
                     wd = getwd()) {
