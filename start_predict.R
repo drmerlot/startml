@@ -1,4 +1,5 @@
-#============= predict with the random holdout models.
+#==========================================================
+#predict with selected models from start_autotrain
 start.predict <- function(test, best_models) {
   cat("Predicting on test set with glm models\n")
   predctions_glm <- lapply(best_models[[1]], h2o.predict, newdata = test)

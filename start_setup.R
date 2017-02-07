@@ -1,5 +1,5 @@
+#============================================================
 ## the prepare function
-# right now just loads the train set, this needs some work....
 
 # load libraries
 library(h2o)
@@ -22,7 +22,7 @@ test_file <- "~/Desktop/auto/numerai_tournament_data.csv"
 y_name <- "target"
 y_type <- "discrete" # or "continous"
 
-#========================================
+#============================================================
 # the load data function.
 start.loaddata <- function(train_file) {
   df1 <- h2o.importFile(path = normalizePath(train_file))

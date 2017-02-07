@@ -1,3 +1,6 @@
+#=================================================
+# Need to separate all functions to their own files
+
 
 # make number, performance / correlation threshold would be best..
 use_num <- 1

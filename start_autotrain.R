@@ -1,5 +1,5 @@
-### function to run all three ...
 #========================================================
+### function to run all three ...
 start.autotrain <- function(train,
                     y_name,
                     y_type,
