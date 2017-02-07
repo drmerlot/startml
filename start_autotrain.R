@@ -5,6 +5,7 @@ start.autotrain <- function(train,
                     y_type,
                     algorithms = c("deeplearning", "randomForest", "gbm"),
                     eval_metirc = "AUTO",
+                    validation_type = "SharedHoldout", # add RandomHoldout and cv
                     wd = getwd()) {
 
   model_paths <- NULL

@@ -5,8 +5,8 @@ start.rfgrid <- function(train,
                           y_type,
                           eval_metric = "AUTO",
                           wd = getwd(),
-                          validation_type = "RandomHoldout", #"CrossValidation"...?
-                          percent_train_holdout = 10,
+                          validation_type = "holdout", #cv
+                          percent_holdout = 10,
                           folds = 3,
                           rf_min_depth = 1,
                           rf_max_depth = 7,
@@ -18,10 +18,10 @@ start.rfgrid <- function(train,
 
   # break the data for holdout validation
   if(is.null(split_seed)) {
-    split_seed <- runif(1, -1000000, 1000000)
+    split_seed <- round(runif(1, -1000000, 1000000))
   }
   if(validation_type == "RandomHoldout") {
-  splits <- h2o.splitFrame(train, 1 - (percent_train_holdout/100), seed = split_seed)
+  splits <- h2o.splitFrame(train, 1 - (percent_holdout/100), seed = split_seed)
   train  <- h2o.assign(splits[[1]], "train.hex")
   valid  <- h2o.assign(splits[[2]], "valid.hex")
   }

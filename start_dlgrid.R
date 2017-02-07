@@ -4,16 +4,16 @@ start.dlgrid<- function(train,
                         y_name,
                         y_type,
                         wd = getwd(),
-                        percent_train_holdout = 0.1,
+                        percent_holdout = 0.1,
                         deeplearning_runtime_secs = 20,
                         deeplearning_stopping_rounds = 10,
                         deeplearning_stopping_tolerance = 1e-5,
                         deeplearning_adaptive_rate = TRUE,
-                        #seeds = c(1234, 4321, 3245, 5432),
-                        grid_strategy = "RandomDiscrete") {
+                        grid_strategy = "RandomDiscrete",
+                        split_seed = NULL) {
 
   # break the data for holdout validation
-  splits <- h2o.splitFrame(train, 1 - percent_train_holdout, seed=1234)
+  splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=1234)
   train  <- h2o.assign(splits[[1]], "train.hex") # 80%
   valid  <- h2o.assign(splits[[2]], "valid.hex") # 20%
 
