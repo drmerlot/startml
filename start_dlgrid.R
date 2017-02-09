@@ -3,6 +3,7 @@
 start.dlgrid<- function(train,
                         y_name,
                         y_type,
+                        eval_metric = "AUTO",
                         wd = getwd(),
                         percent_holdout = 0.1,
                         deeplearning_runtime_secs = 20,
@@ -79,6 +80,7 @@ dl_grid_rand <- h2o.grid(
   adaptive_rate = deeplearning_adaptive_rate,
   hyper_params = hyper_params,
   search_criteria = search_criteria,
+  stopping_metric = eval_metric,
   seed = 1234
 )
 

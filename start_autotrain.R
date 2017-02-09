@@ -4,8 +4,9 @@ start.autotrain <- function(train,
                     y_name,
                     y_type,
                     algorithms = c("deeplearning", "randomForest", "gbm"),
-                    eval_metirc = "AUTO",
+                    eval_metric = "AUTO",
                     validation_type = "SharedHoldout", # add RandomHoldout and cv
+                    split_seed = NULL,
                     wd = getwd()) {
 
   model_paths <- NULL
@@ -14,29 +15,36 @@ start.autotrain <- function(train,
     start.dlgrid(train = train,
                  y_name = y_name,
                  y_type = y_type,
-                 eval_metric = "AUTO")
+                 eval_metric = eval_metric,
+                 split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/dl_models", sep = ""))
-  } else if(sum(as.numeric(algorithms %in% "randomForest")) == 1) {
+  }
+  if(sum(as.numeric(algorithms %in% "randomForest")) == 1) {
     start.rfgrid(train = train,
                  y_name = y_name,
                  y_type = y_type,
-                 eval_metric = "AUTO")
-    model_paths <- c(model_paths, paste(wd, "/dl_models", sep = ""))
-  } else if(sum(as.numeric(algorithms %in% "gbm")) == 1) {
+                 eval_metric = eval_metric,
+                 split_seed = split_seed)
+    model_paths <- c(model_paths, paste(wd, "/rf_models", sep = ""))
+  }
+  if(sum(as.numeric(algorithms %in% "gbm")) == 1) {
     start.gbmgrid(train = train,
                   y_name = y_name,
                   y_type = y_type,
-                  eval_metric = "AUTO")
+                  eval_metric = eval_metric,
+                  split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/gbm_models", sep = ""))
-  } else {
+  }
+  if(sum(as.numeric(algorithms %in% "gbm") + as.numeric(algorithms %in% "randomForest") +
+         as.numeric(algorithms %in% "deeplearning") == 0)) {
     stop("Set algorithms to one or a combination of 'deeplearning', 'randomForest', 'gbm'")
   }
 
   all_models <- lapply(model_paths, start.loadmodels)
 
-  # use lapply to walk through instead of above  ..
+  # get use from thresholds (not finished)
   use_num <- 1
-  best_models <- lapply(all_models, sort_models, use_num)
+  best_models <- lapply(all_models, start.sortmodels, x = use_num, eval_metric = eval_metric)
   best_models
 
 }

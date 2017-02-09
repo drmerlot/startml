@@ -3,6 +3,8 @@
 start.gbmgrid <- function(train,
                           y_name,
                           y_type,
+                          eval_metric = "AUTO",
+                          validation_type = "SharedHoldout",
                           wd = getwd(),
                           percent_holdout = 0.1,
                           gbm_min_depth = 1,
@@ -55,6 +57,7 @@ start.gbmgrid <- function(train,
     max_runtime_secs = gbm_runtime_secs,
     stopping_rounds =  gbm_stopping_rounds,
     stopping_tolerance = gbm_stopping_tolerance,
+    stopping_metric = eval_metric,
     seed = 1234
   )
 

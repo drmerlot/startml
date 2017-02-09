@@ -5,7 +5,7 @@ start.rfgrid <- function(train,
                           y_type,
                           eval_metric = "AUTO",
                           wd = getwd(),
-                          validation_type = "holdout", #cv
+                          validation_type = "SharedHoldout", #cv
                           percent_holdout = 10,
                           folds = 3,
                           rf_min_depth = 1,
@@ -20,10 +20,11 @@ start.rfgrid <- function(train,
   if(is.null(split_seed)) {
     split_seed <- round(runif(1, -1000000, 1000000))
   }
-  if(validation_type == "RandomHoldout") {
-  splits <- h2o.splitFrame(train, 1 - (percent_holdout/100), seed = split_seed)
-  train  <- h2o.assign(splits[[1]], "train.hex")
-  valid  <- h2o.assign(splits[[2]], "valid.hex")
+  # need condition for other holdouts
+  if(validation_type == "SharedHoldout") {
+    splits <- h2o.splitFrame(train, 1 - (percent_holdout/100), seed = split_seed)
+    train  <- h2o.assign(splits[[1]], "train.hex")
+    valid  <- h2o.assign(splits[[2]], "valid.hex")
   }
   # define the target and predictors
   y <- y_name
@@ -58,6 +59,7 @@ search_criteria = list(
   max_runtime_secs = rf_runtime_secs,
   stopping_rounds = rf_stopping_rounds,
   stopping_tolerance = rf_stopping_tolerance,
+  stopping_metric = eval_metric,
   seed = 1234
 )
 

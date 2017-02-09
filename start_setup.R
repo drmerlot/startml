@@ -3,15 +3,21 @@
 
 # load libraries
 library(h2o)
-library(cvAUC)
-library(Metrics)
-library(h2oEnsemble)
+#library(cvAUC)
+#library(Metrics)
+#library(h2oEnsemble)
 
 
 ## start decent size (more ram than needed for this)
 h2o.shutdown(prompt = FALSE)
 h2o.init(nthreads=2, max_mem_size="6G")
 h2o.removeAll()
+
+load_files <- as.list(list.files(path = "~/Desktop/auto/start.ml/",
+                                 pattern = "start*", full.names = TRUE))
+load_files <- load_files[-which(load_files %in% "/Users/grad/Desktop/auto/start.ml//start_setup.R")]
+
+getfiles <- lapply(load_files, source)
 
 # extra
 wd <- "~/Desktop/auto"
@@ -35,7 +41,12 @@ test <- start.loaddata(test_file)
 
 
 # run the ml file..
-mlout <- start.ml(train = df1, test = test, y_name = "target", y_type = "discrete")
+mlout <- start.ml(train = df1,
+                  test = test,
+                  y_name = "target",
+                  y_type = "discrete",
+                  eval_metric = "logloss",
+                  validation_type = "SharedHoldout",
+                  split_seed = 1234
+                  )
 
-
-te <- start.autotrain(train = df1, y_name = 'target', y_type = 'discrete')
