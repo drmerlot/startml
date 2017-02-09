@@ -1,13 +1,8 @@
 #==========================================================
 #predict with selected models from start_autotrain
 start.predict <- function(test, selected_models) {
-  cat("Predicting on test set with deep learning models\n")
-  predctions_dl <- lapply(selected_models[[1]], h2o.predict, newdata = test)
-  cat("Predicting on test set with random forest models\n")
-  predctions_rf <- lapply(selected_models[[2]], h2o.predict, newdata = test)
-  cat("Predicting on test set with gradient boosting models\n")
-  predctions_gbm <- lapply(selected_models[[3]], h2o.predict, newdata = test)
-  predictions <- list(predctions_dl, predctions_rf, predctions_gbm)
+  cat("Predicting on New Data With Selected Models\n")
+  predctions_dl <- lapply(selected_models, h2o.predict, newdata = test)
   predictions
 }
 
