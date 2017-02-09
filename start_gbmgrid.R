@@ -9,7 +9,7 @@ start.gbmgrid <- function(train,
                           percent_holdout = 0.1,
                           gbm_min_depth = 1,
                           gbm_max_depth = 7,
-                          gbm_runtime_secs = 20,
+                          gbm_runtime_secs = 10,
                           gbm_stopping_rounds = 10,
                           gbm_stopping_tolerance = 1e-5,
                           grid_strategy = "RandomDiscrete",
@@ -76,8 +76,7 @@ start.gbmgrid <- function(train,
   )
 
 
-  # get the grid and sort by logloss
-  gbm_grid <- h2o.getGrid("gbm_grid_random", decreasing=FALSE)
+  gbm_grid <- h2o.getGrid("gbm_grid_random")
 
 
   # write out the models to disk

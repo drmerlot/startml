@@ -6,7 +6,7 @@ start.dlgrid<- function(train,
                         eval_metric = "AUTO",
                         wd = getwd(),
                         percent_holdout = 0.1,
-                        deeplearning_runtime_secs = 20,
+                        deeplearning_runtime_secs = 10,
                         deeplearning_stopping_rounds = 10,
                         deeplearning_stopping_tolerance = 1e-5,
                         deeplearning_adaptive_rate = TRUE,
@@ -85,8 +85,7 @@ dl_grid_rand <- h2o.grid(
   seed = 1234
 )
 
-# get the grid and sort by logloss
-dl_grid <- h2o.getGrid("dl_grid_random", decreasing=FALSE)
+dl_grid <- h2o.getGrid("dl_grid_random")
 
 # write out the models to disk
 dl_path <- paste(wd, "/dl_models", sep = "")

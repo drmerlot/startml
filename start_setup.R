@@ -102,6 +102,24 @@ model_list <- start.autotrain(train = df1,
                   split_seed = 1234
 )
 
+eval_metric = "RMSE"
+
+metric <- start.validmetric(model_list, eval_metric = "RMSE")
+
+sorted_models <- start.sortmodels(model_list, eval_metric = eval_metric)
+
+selected_models <- start.selectmodels(sorted_models, all_models, x=1)
+
+
+predictions <- start.predict(test = test, selected_models)
+
+
+
+
+
+
+
+
 
 
 

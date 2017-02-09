@@ -78,8 +78,7 @@ rf_grid_rand <- h2o.grid(
 )
 
 
-# get the grid and sort by logloss
-rf_grid <- h2o.getGrid("rf_grid_random", decreasing=FALSE)
+rf_grid <- h2o.getGrid("rf_grid_random")
 
 
 # write out the models to disk
