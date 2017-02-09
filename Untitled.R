@@ -14,7 +14,7 @@ start.validmetric <- function(model_list, eval_metric) {
   } else if(eval_metric == "mean_per_class_error") {
     metric <- h2o.mean_per_class_error(model_list, valid = TRUE)
   } else {
-    stop("Choose an eval metric: logloss, MSE, RMSE, MAE, AUC, mean_per_class_error")
+    stop("Choose and eval metric logloss, MSE, RMSE, MAE, AUC, mean_per_class_error")
   }
   metric
 }

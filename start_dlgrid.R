@@ -13,6 +13,7 @@ start.dlgrid<- function(train,
                         grid_strategy = "RandomDiscrete",
                         split_seed = NULL) {
 
+  cat("Training Deep Learning Models\n")
   # break the data for holdout validation
   splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=1234)
   train  <- h2o.assign(splits[[1]], "train.hex") # 80%
@@ -93,5 +94,6 @@ dl_model_files <- sapply(dl_grid@model_ids, function(m) h2o.saveModel(h2o.getMod
 
 # print out alert
 cat(paste("Deep Learning Models Saved To:\n", dl_path, "\n"))
+dl_grid
 
 }

@@ -25,7 +25,7 @@ start.autotrain <- function(train,
                  y_type = y_type,
                  eval_metric = eval_metric,
                  split_seed = split_seed)
-    model_paths <- c(model_paths, paste(wd, "/rf_models", sep = ""))
+    model_paths <- c(model_paths, paste(wd, "/_models", sep = ""))
   }
   if(sum(as.numeric(algorithms %in% "gbm")) == 1) {
     start.gbmgrid(train = train,
@@ -41,10 +41,6 @@ start.autotrain <- function(train,
   }
 
   all_models <- lapply(model_paths, start.loadmodels)
-
-  # get use from thresholds (not finished)
-  use_num <- 1
-  best_models <- lapply(all_models, start.sortmodels, x = use_num, eval_metric = eval_metric)
-  best_models
+  all_models
 
 }

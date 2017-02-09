@@ -11,12 +11,15 @@ start.ml <- function(train, test,
     stop("Set 'split_seed' to any real number for common random sampling when validation = SharedHoldout")
   }
 
-  selected_models <- start.autotrain(train = train,
+  all_models <- start.autotrain(train = train,
                                     y_name = y_name,
                                     y_type = y_type,
                                     algorithms = algorithms,
                                     eval_metric = eval_metric,
                                     split_seed = split_seed)
+
+  sorted_models <- start.sortmodels(all_models, x = 1, eval_metric = eval_metric)
+  selected_models <- start.selectmodels(sorted_models, all_models, x=1)
   predictions <- start.predict(test = test, selected_models)
 
   if(return_dataframe == FALSE) {

@@ -1,11 +1,11 @@
 #==================================================================
-## Train fr models
+## Train rf models
 start.rfgrid <- function(train,
                           y_name,
                           y_type,
                           eval_metric = "AUTO",
                           wd = getwd(),
-                          validation_type = "SharedHoldout", #cv
+                          validation_type = "SharedHoldout", #need to add the others
                           percent_holdout = 10,
                           folds = 3,
                           rf_min_depth = 1,
@@ -16,6 +16,7 @@ start.rfgrid <- function(train,
                           grid_strategy = "RandomDiscrete",
                           split_seed = NULL) {
 
+  cat("Training Random Forest Models\n")
   # break the data for holdout validation
   if(is.null(split_seed)) {
     split_seed <- round(runif(1, -1000000, 1000000))
