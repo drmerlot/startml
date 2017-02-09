@@ -50,6 +50,16 @@ mlout <- start.ml(train = df1,
                   split_seed = 1234
                   )
 
+# for testing
+# run the ml file on binary classification.
+models <- start.autotrain(train = df1,
+                  y_name = "target",
+                  y_type = "discrete",
+                  eval_metric = "logloss",
+                  validation_type = "SharedHoldout",
+                  split_seed = 1234
+)
+
 
 #============================================================
 # the load data function.

@@ -2,7 +2,7 @@
 # get validation metrics from models
 start.validmetric <- function(model_list, eval_metric) {
   if(eval_metric == "logloss") {
-    metric <- h2o.logloss(model_list, valid = TRUE)
+    metric <- lapply(model_list, h2o.logloss, valid = TRUE)
   } else if(eval_metric == "MSE") {
     metric <- lapply(model_list, h2o.mse, valid = TRUE)
   } else if(eval_metric == "RMSE") {
