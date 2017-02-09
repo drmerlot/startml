@@ -16,7 +16,7 @@ start.rfgrid <- function(train,
                           grid_strategy = "RandomDiscrete",
                           split_seed = NULL) {
 
-  cat("Training Random Forest Models\n\n")
+  cat("Training Random Forest Models\n")
   # break the data for holdout validation
   if(is.null(split_seed)) {
     split_seed <- round(runif(1, -1000000, 1000000))
@@ -87,7 +87,7 @@ rf_path <- paste(wd, "/rf_models", sep = "")
 rf_model_files <- sapply(rf_grid@model_ids, function(m) h2o.saveModel(h2o.getModel(m), path = rf_path, force = TRUE))
 
 # print out, needs work
-cat(paste("Random Forest Models Saved To:\n", rf_path, "\n"))
+cat(paste("Random Forest Models Saved To:\n", rf_path, "\n\n"))
 rf_grid
 
 }

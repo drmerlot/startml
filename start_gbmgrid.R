@@ -15,7 +15,7 @@ start.gbmgrid <- function(train,
                           grid_strategy = "RandomDiscrete",
                           split_seed = NULL) {
 
-  cat("Training Gradient Boosting Models\n\n")
+  cat("Training Gradient Boosting Models\n")
   # break the data for holdout validation
   splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=1234)
   train  <- h2o.assign(splits[[1]],  "train.hex") # 80%
@@ -85,7 +85,7 @@ start.gbmgrid <- function(train,
   gbm_model_files <- sapply(gbm_grid@model_ids, function(m) h2o.saveModel(h2o.getModel(m), path = gbm_path, force = TRUE))
 
   # print out, needs work
-  cat(paste("gbm Models Saved To:\n", gbm_path, "\n"))
+  cat(paste("gbm Models Saved To:\n", gbm_path, "\n\n"))
   gbm_grid
 
 
