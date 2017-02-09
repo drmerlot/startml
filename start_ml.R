@@ -18,7 +18,7 @@ start.ml <- function(train, test,
                                     eval_metric = eval_metric,
                                     split_seed = split_seed)
 
-  sorted_models <- start.sortmodels(all_models, x = 1, eval_metric = eval_metric)
+  sorted_models <- start.sortmodels(all_models, eval_metric = eval_metric)
   selected_models <- start.selectmodels(sorted_models, all_models, x=1)
   predictions <- start.predict(test = test, selected_models)
 

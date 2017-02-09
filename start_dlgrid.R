@@ -13,7 +13,7 @@ start.dlgrid<- function(train,
                         grid_strategy = "RandomDiscrete",
                         split_seed = NULL) {
 
-  cat("Training Deep Learning Models\n")
+  cat("Training Deep Learning Models\n\n")
   # break the data for holdout validation
   splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=1234)
   train  <- h2o.assign(splits[[1]], "train.hex") # 80%

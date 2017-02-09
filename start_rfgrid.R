@@ -16,7 +16,7 @@ start.rfgrid <- function(train,
                           grid_strategy = "RandomDiscrete",
                           split_seed = NULL) {
 
-  cat("Training Random Forest Models\n")
+  cat("Training Random Forest Models\n\n")
   # break the data for holdout validation
   if(is.null(split_seed)) {
     split_seed <- round(runif(1, -1000000, 1000000))
