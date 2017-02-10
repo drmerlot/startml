@@ -108,7 +108,7 @@ model_list <- start.autotrain(train = df1,
                   #test = test,
                   y_name = "SalePrice",
                   y_type = "continuous",
-                  eval_metric = "RMSE",
+                  eval_metric = "RMSLE",
                   validation_type = "SharedHoldout",
                   split_seed = 1234
 )
