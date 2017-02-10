@@ -13,18 +13,18 @@ h2o.shutdown(prompt = FALSE)
 h2o.init(nthreads=2, max_mem_size="6G")
 h2o.removeAll()
 
-load_files <- as.list(list.files(path = "~/Desktop/auto/start.ml/",
+load_files <- as.list(list.files(path = wd <- "C:/Users/Andy/Desktop/auto/start.ml/",
                                  pattern = "start*", full.names = TRUE))
-load_files <- load_files[-which(load_files %in% "/Users/grad/Desktop/auto/start.ml//start_setup.R")]
+load_files <- load_files[-which(load_files %in% "C:/Users/Andy/Desktop/auto/start.ml/start_setup.R")]
 
 getfiles <- lapply(load_files, source)
 
 # extra
-wd <- "~/Desktop/auto"
+wd <- "C:/Users/Andy/Desktop/auto"
 setwd(wd)
 
-train_file <- "~/Desktop/auto/numerai_training_data.csv"
-test_file <- "~/Desktop/auto/numerai_tournament_data.csv"
+train_file <- "numerai_training_data.csv"
+test_file <- "numerai_tournament_data.csv"
 y_name <- "target"
 y_type <- "discrete" # or "continous"
 
@@ -67,18 +67,18 @@ models <- start.autotrain(train = df1,
 # test on kaggle housing prices ...
 h2o.removeAll()
 
-load_files <- as.list(list.files(path = "~/Desktop/auto/start.ml/",
+load_files <- as.list(list.files(path = "C:/Users/Andy/Desktop/auto/start.ml/",
                                  pattern = "start*", full.names = TRUE))
-load_files <- load_files[-which(load_files %in% "/Users/grad/Desktop/auto/start.ml//start_setup.R")]
+load_files <- load_files[-which(load_files %in% "C:/Users/Andy/Desktop/auto/start.ml/start_setup.R")]
 
 getfiles <- lapply(load_files, source)
 
 # extra
-wd <- "~/Desktop/auto"
+wd <- "C:/Users/Andy/Desktop/auto"
 setwd(wd)
 
-train_file <- "~/Desktop/auto/train.csv"
-test_file <- "~/Desktop/auto/test.csv"
+train_file <- "train.csv"
+test_file <- "test.csv"
 
 
 start.loaddata <- function(train_file) {
@@ -108,24 +108,56 @@ model_list <- start.autotrain(train = df1,
                   #test = test,
                   y_name = "SalePrice",
                   y_type = "continuous",
-                  eval_metric = "RMSE",
+                  eval_metric = "MSE",
                   validation_type = "SharedHoldout",
+                  runtime_secs = 1200, 
                   split_seed = 1234
 )
 
-eval_metric = "RMSE"
 
-metric <- start.validmetric(model_list, eval_metric = "RMSE")
+metric <- start.validmetric(model_list, eval_metric = "RMSLE")
 
 sorted_models <- start.sortmodels(model_list, eval_metric = eval_metric)
 
-selected_models <- start.selectmodels(sorted_models, all_models, x=1)
+selected_models <- start.selectmodels(sorted_models, model_list, number_top_models = 100)
 
 
 predictions <- start.predict(test = test, selected_models)
 
+# test 
+# make a data frame
+r_data <- lapply(predictions, as.data.frame)
+pred_df <- do.call('cbind', r_data)
+basic_bag <- rowMeans(pred_df)
+r_test <- as.data.frame(test)
+id <- r_test$Id
+output <- data.frame(Id = id, SalePrice = basic_bag)
 
+write.csv(output, "test_sub_2.csv", row.names = FALSE, quote = FALSE)
 
+# view all models 
+
+validations <- start.predict(valid, selected_models)
+r_val <- lapply(validations, as.data.frame)
+valid_df <- do.call('cbind', r_val)
+val_bag <- rowMeans(valid_df)
+performance <- data.frame(valid_df, val_mean = val_bag, as.data.frame(valid$SalePrice))
+
+library(ggplot2)
+library(reshape2)
+library(magrittr)
+m_per <- melt(performance, c(ncol(performance) - 1,  ncol(performance)))
+
+m_per$variable <- as.numeric(m_per$variable)
+
+m_per[order(m_per$SalePrice),] %>% 
+  ggplot() + 
+  geom_point(aes(x = seq(1, nrow(m_per)), y = SalePrice), col = "blue") + 
+  geom_line(aes(x = seq(1, nrow(m_per)), y = value, color = variable), alpha = 0.3) +
+  geom_line(aes(x = seq(1, nrow(m_per)), y = val_mean),color = "black", alpha = 0.8, size = .3) +
+  scale_color_discrete(guide=FALSE)
+  #xlim(c(600,700)) + 
+ # ylim(c(100000, 200000))
 
 
 
