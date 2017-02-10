@@ -119,7 +119,7 @@ metric <- start.validmetric(model_list, eval_metric = "RMSLE")
 
 sorted_models <- start.sortmodels(model_list, eval_metric = eval_metric)
 
-selected_models <- start.selectmodels(sorted_models, model_list, number_top_models = 100)
+selected_models <- start.selectmodels(sorted_models, model_list, number_top_models = 335)
 
 
 predictions <- start.predict(test = test, selected_models)
@@ -140,21 +140,32 @@ write.csv(output, "test_sub_2.csv", row.names = FALSE, quote = FALSE)
 validations <- start.predict(valid, selected_models)
 r_val <- lapply(validations, as.data.frame)
 valid_df <- do.call('cbind', r_val)
-val_bag <- rowMeans(valid_df)
-performance <- data.frame(valid_df, val_mean = val_bag, as.data.frame(valid$SalePrice))
+
+#!! some correlation check
+corr <- cor(valid_df) 
+# uncorrelateds are 140 and 300
+
+uncor <- c(140, 300)
+
+val_bag <- rowMeans(valid_df[, uncor])
+
+performance <- data.frame(valid_df[, uncor], val_mean = val_bag, as.data.frame(valid$SalePrice))
+
 
 library(ggplot2)
 library(reshape2)
 library(magrittr)
+
 m_per <- melt(performance, c(ncol(performance) - 1,  ncol(performance)))
 
-m_per$variable <- as.numeric(m_per$variable)
+# probably deleate
+#m_per$variable <- as.numeric(m_per$variable)
 
 m_per[order(m_per$SalePrice),] %>% 
   ggplot() + 
+  geom_point(aes(x = seq(1, nrow(m_per)), y = value, color = variable), alpha = 0.3) +
   geom_point(aes(x = seq(1, nrow(m_per)), y = SalePrice), col = "blue") + 
-  geom_line(aes(x = seq(1, nrow(m_per)), y = value, color = variable), alpha = 0.3) +
-  geom_line(aes(x = seq(1, nrow(m_per)), y = val_mean),color = "black", alpha = 0.8, size = .3) +
+  geom_point(aes(x = seq(1, nrow(m_per)), y = val_mean),color = "black", alpha = 0.8, size = .5) +
   scale_color_discrete(guide=FALSE)
   #xlim(c(600,700)) + 
  # ylim(c(100000, 200000))
