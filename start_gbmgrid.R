@@ -17,7 +17,10 @@ start.gbmgrid <- function(train,
 
   cat("Training Gradient Boosting Models\n")
   # break the data for holdout validation
-  splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=1234)
+  if(is.null(split_seed)) {
+    split_seed <- round(runif(1, -1000000, 1000000))
+  }
+  splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=split_seed)
   train  <- h2o.assign(splits[[1]],  "train.hex") # 80%
   valid  <- h2o.assign(splits[[2]], "valid.hex") # 20%
 

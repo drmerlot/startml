@@ -6,7 +6,7 @@ start.dlgrid<- function(train,
                         eval_metric = "AUTO",
                         wd = getwd(),
                         percent_holdout = 0.1,
-                        deeplearning_runtime_secs = 10,
+                        deeplearning_runtime_secs = 3600,
                         deeplearning_stopping_rounds = 10,
                         deeplearning_stopping_tolerance = 1e-5,
                         deeplearning_adaptive_rate = TRUE,
@@ -15,7 +15,11 @@ start.dlgrid<- function(train,
 
   cat("Training Deep Learning Models\n")
   # break the data for holdout validation
-  splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=1234)
+  if(is.null(split_seed)) {
+    split_seed <- round(runif(1, -1000000, 1000000))
+  }
+  # break the data for holdout validation
+  splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=split_seed)
   train  <- h2o.assign(splits[[1]], "train.hex") # 80%
   valid  <- h2o.assign(splits[[2]], "valid.hex") # 20%
 
