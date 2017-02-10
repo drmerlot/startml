@@ -13,6 +13,8 @@ start.validmetric <- function(model_list, eval_metric) {
     metric <- lapply(model_list, h2o.auc, valid = TRUE)
   } else if(eval_metric == "mean_per_class_error") {
     metric <- lapply(model_list, h2o.mean_per_class_error, valid = TRUE)
+  }else if(eval_metric == "RMSLE") {
+    metric <- lapply(model_list, h2o.rmsle, valid = TRUE)
   } else {
     stop("Choose an eval metric: logloss, MSE, RMSE, MAE, AUC, mean_per_class_error")
   }
