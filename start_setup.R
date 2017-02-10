@@ -110,7 +110,7 @@ model_list <- start.autotrain(train = df1,
                   y_type = "continuous",
                   eval_metric = "MSE",
                   validation_type = "SharedHoldout",
-                  runtime_secs = 1200, 
+                  runtime_secs = 7200, 
                   split_seed = 1234
 )
 
@@ -119,7 +119,7 @@ metric <- start.validmetric(model_list, eval_metric = "RMSLE")
 
 sorted_models <- start.sortmodels(model_list, eval_metric = eval_metric)
 
-selected_models <- start.selectmodels(sorted_models, model_list, number_top_models = 334)
+selected_models <- start.selectmodels(sorted_models, model_list, number_top_models = 5)
 
 
 predictions <- start.predict(test = test, selected_models)
@@ -137,7 +137,7 @@ write.csv(output, "test_sub_2.csv", row.names = FALSE, quote = FALSE)
 
 # view all models 
 
-validations <- start.predict(valid, selected_models)
+validations <- start.predict(train, selected_models)
 r_val <- lapply(validations, as.data.frame)
 valid_df <- do.call('cbind', r_val)
 
@@ -149,9 +149,9 @@ cor(valid_df[,1], valid_df[,80])
 
 uncor <- c(1, 80)
 
-val_bag <- rowMeans(valid_df[, uncor])
+val_bag <- rowMeans(valid_df)
 
-performance <- data.frame(valid_df[,seq(1, nrow(valid_df) - 1)], val_mean = val_bag, as.data.frame(valid$SalePrice))
+performance <- data.frame(valid_df, val_mean = val_bag, as.data.frame(train$SalePrice))
 performance <- data.frame(valid_df[, uncor], val_mean = val_bag, as.data.frame(valid$SalePrice))
 
 
@@ -169,11 +169,10 @@ m_per[order(m_per$SalePrice),] %>%
   geom_point(aes(x = seq(1, nrow(m_per)), y = value, color = variable), alpha = 0.3) +
   geom_point(aes(x = seq(1, nrow(m_per)), y = SalePrice), col = "blue") + 
   geom_point(aes(x = seq(1, nrow(m_per)), y = val_mean),color = "black", alpha = 0.8, size = .5) +
-  scale_color_discrete(guide=FALSE) + 
-  theme_grey()
-
-  #xlim(c(600,700)) + 
- # ylim(c(100000, 200000))
+  scale_color_discrete(guide=FALSE) +  
+  #theme_grey() +  
+  xlim(c(6000,6750)) + 
+  ylim(c(200000, 800000))
 
 
 
