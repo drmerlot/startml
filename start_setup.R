@@ -98,6 +98,7 @@ mlout <- start.ml(train = df1,
                   y_name = "SalePrice",
                   y_type = "continuous",
                   eval_metric = "RMSE",
+                  number_top_models = 5,
                   validation_type = "SharedHoldout",
                   split_seed = 1234
 )

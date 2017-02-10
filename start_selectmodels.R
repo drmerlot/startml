@@ -1,7 +1,6 @@
 #===========================================================
-# get best models by top number
-# would be better to set performance threshold and correlation threhold for ens.
-start.selectmodels <- function(sorted_models, model_list, x) {
-  selected_models <- model_list[sorted_models$model_list_num[1:x]]
+# get best models by performance threshold
+start.selectmodels <- function(sorted_models, model_list, number_top_models = 1) {
+  selected_models <- model_list[sorted_models$model_list_num[1:number_top_models]]
   selected_models
 }

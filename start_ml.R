@@ -4,6 +4,7 @@ start.ml <- function(train, test,
                      y_name, y_type,
                      algorithms = c("deeplearning", "randomForest", "gbm"),
                      eval_metric = "AUTO",
+                     number_top_models = 1,
                      validation_type = "SharedHoldout", # add RandomHoldout and cv
                      split_seed = NULL,
                      return_dataframe = FALSE) {
@@ -19,7 +20,7 @@ start.ml <- function(train, test,
                                     split_seed = split_seed)
 
   sorted_models <- start.sortmodels(all_models, eval_metric = eval_metric)
-  selected_models <- start.selectmodels(sorted_models, all_models, x=1)
+  selected_models <- start.selectmodels(sorted_models, all_models, number_top_models = number_top_models)
   predictions <- start.predict(test = test, selected_models)
 
   if(return_dataframe == FALSE) {
