@@ -119,7 +119,7 @@ metric <- start.validmetric(model_list, eval_metric = "RMSLE")
 
 sorted_models <- start.sortmodels(model_list, eval_metric = eval_metric)
 
-selected_models <- start.selectmodels(sorted_models, model_list, number_top_models = 335)
+selected_models <- start.selectmodels(sorted_models, model_list, number_top_models = 334)
 
 
 predictions <- start.predict(test = test, selected_models)
@@ -145,10 +145,13 @@ valid_df <- do.call('cbind', r_val)
 corr <- cor(valid_df) 
 # uncorrelateds are 140 and 300
 
-uncor <- c(140, 300)
+cor(valid_df[,1], valid_df[,80])
+
+uncor <- c(1, 80)
 
 val_bag <- rowMeans(valid_df[, uncor])
 
+performance <- data.frame(valid_df[,seq(1, nrow(valid_df) - 1)], val_mean = val_bag, as.data.frame(valid$SalePrice))
 performance <- data.frame(valid_df[, uncor], val_mean = val_bag, as.data.frame(valid$SalePrice))
 
 
@@ -166,7 +169,9 @@ m_per[order(m_per$SalePrice),] %>%
   geom_point(aes(x = seq(1, nrow(m_per)), y = value, color = variable), alpha = 0.3) +
   geom_point(aes(x = seq(1, nrow(m_per)), y = SalePrice), col = "blue") + 
   geom_point(aes(x = seq(1, nrow(m_per)), y = val_mean),color = "black", alpha = 0.8, size = .5) +
-  scale_color_discrete(guide=FALSE)
+  scale_color_discrete(guide=FALSE) + 
+  theme_grey()
+
   #xlim(c(600,700)) + 
  # ylim(c(100000, 200000))
 
