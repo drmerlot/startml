@@ -3,6 +3,7 @@
 start.selectmodels <- function(model_list,
                                test,
                                eval_metric,
+                               y_name,
                                eval_threshold = NULL,
                                correlation_threshold = NULL) {
   if(eval_metric == "AUC") {
@@ -32,7 +33,7 @@ start.selectmodels <- function(model_list,
     if(is.null(eval_threshold)) {
       low_cor_models
     } else {
-      metrics <- unlist(start.validmetric(low_cor_models, eval_metric = eval_metric))
+      metrics <- unlist(start.testmetric(prediction_list, test = test, y_name = y_name, eval_metric = eval_metric))
       keep_models <- low_cor_models[eval_fun(metrics, eval_threshold)]
     }
   }
@@ -42,10 +43,12 @@ start.selectmodels <- function(model_list,
   keep_models
   }
 }
-#
-# test_out <- start.selectmodels(model_list = model_list,
-#                                test = test,
-#                    eval_metric = "RMSE",
-#                    eval_threshold = 100,
-#                    correlation_threshold = 0.7)
+
+
+test_out <- start.selectmodels(model_list = model_list,
+                               test = test,
+                   eval_metric = "RMSLE",
+                   eval_threshold = 100,
+                   y_name = "SalePrice",
+                   correlation_threshold = 0.01)
 
