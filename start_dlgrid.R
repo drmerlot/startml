@@ -69,10 +69,10 @@ dl_parameter_search <- list(
 
 # set variable type for proper auto options
 if(deeplearning_adaptive_rate == TRUE) {
-  hyper_params <- deeplearning_parameter_search[seq(7,15)]
+  hyper_params <- dl_parameter_search[seq(7,15)]
 }
 if(deeplearning_adaptive_rate == FALSE) {
-  hyper_params <- deeplearning_parameter_search[seq(1:13)]
+  hyper_params <- dl_parameter_search[seq(1:13)]
 }
 
 dl_search_criteria = list(strategy = grid_strategy,
