@@ -67,7 +67,7 @@ start.gbmgrid <- function(train,
 
   gbm_random_grid <- h2o.grid(
     algorithm = "gbm",
-    grid_id = "gbm_grid_random",
+    grid_id = "gbm",
     x = x,
     y = y,
     training_frame = train,
@@ -79,7 +79,7 @@ start.gbmgrid <- function(train,
   )
 
 
-  gbm_grid <- h2o.getGrid("gbm_grid_random")
+  gbm_grid <- h2o.getGrid("gbm")
 
 
   # write out the models to disk

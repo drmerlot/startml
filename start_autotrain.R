@@ -6,7 +6,7 @@ start.autotrain <- function(train,
                     algorithms = c("deeplearning", "randomForest", "gbm"),
                     eval_metric = "AUTO",
                     validation_type = "SharedHoldout", # add RandomHoldout and cv
-                    runtime_secs = 60, 
+                    runtime_secs = 5,
                     split_seed = NULL,
                     wd = getwd()) {
 
@@ -17,7 +17,7 @@ start.autotrain <- function(train,
                  y_name = y_name,
                  y_type = y_type,
                  eval_metric = eval_metric,
-                 deeplearning_runtime_secs = runtime_secs, 
+                 deeplearning_runtime_secs = runtime_secs,
                  split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/dl_models", sep = ""))
   }
@@ -26,7 +26,7 @@ start.autotrain <- function(train,
                  y_name = y_name,
                  y_type = y_type,
                  eval_metric = eval_metric,
-                 rf_runtime_secs = runtime_secs, 
+                 rf_runtime_secs = runtime_secs,
                  split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/rf_models", sep = ""))
   }
@@ -35,7 +35,7 @@ start.autotrain <- function(train,
                   y_name = y_name,
                   y_type = y_type,
                   eval_metric = eval_metric,
-                  gbm_runtime_secs = runtime_secs, 
+                  gbm_runtime_secs = runtime_secs,
                   split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/gbm_models", sep = ""))
   }

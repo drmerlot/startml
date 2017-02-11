@@ -74,7 +74,7 @@ search_criteria = list(strategy = grid_strategy,
 # run the grid
 dl_grid_rand <- h2o.grid(
   algorithm="deeplearning",
-  grid_id = "dl_grid_random",
+  grid_id = "dl",
   training_frame=train,
   validation_frame = valid,
   x=x,
@@ -89,7 +89,7 @@ dl_grid_rand <- h2o.grid(
   seed = 1234
 )
 
-dl_grid <- h2o.getGrid("dl_grid_random")
+dl_grid <- h2o.getGrid("dl")
 
 # write out the models to disk
 dl_path <- paste(wd, "/dl_models", sep = "")

@@ -68,7 +68,7 @@ rf_grid_rand <- h2o.grid(
   hyper_params = hyper_params,
   search_criteria = search_criteria,
   algorithm = "randomForest",
-  grid_id = "rf_grid_random",
+  grid_id = "rf",
   x = x,
   y = y,
   training_frame = train,
@@ -78,7 +78,7 @@ rf_grid_rand <- h2o.grid(
 )
 
 
-rf_grid <- h2o.getGrid("rf_grid_random")
+rf_grid <- h2o.getGrid("rf")
 
 
 # write out the models to disk
