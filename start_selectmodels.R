@@ -45,10 +45,10 @@ start.selectmodels <- function(model_list,
 }
 
 
-test_out <- start.selectmodels(model_list = model_list,
-                               test = test,
-                   eval_metric = "RMSLE",
-                   eval_threshold = 100,
-                   y_name = "SalePrice",
-                   correlation_threshold = 0.01)
+# test_out <- start.selectmodels(model_list = model_list,
+#                                test = test,
+#                    eval_metric = "RMSLE",
+#                    eval_threshold = 100,
+#                    y_name = "SalePrice",
+#                    correlation_threshold = 0.01)
 
