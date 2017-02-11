@@ -5,7 +5,10 @@ start.dlgrid<- function(train,
                         y_type,
                         eval_metric = "AUTO",
                         wd = getwd(),
-                        percent_holdout = 0.1,
+                        validation_type = "SharedHoldout",
+                        percent_valid_holdout = 10,
+                        percent_test_holdout = 10,
+                        folds = NULL,
                         deeplearning_runtime_secs = 3600,
                         deeplearning_stopping_rounds = 10,
                         deeplearning_stopping_tolerance = 1e-5,
@@ -16,12 +19,20 @@ start.dlgrid<- function(train,
   cat("Training Deep Learning Models\n")
   # break the data for holdout validation
   if(is.null(split_seed)) {
-    split_seed <- round(runif(1, -1000000, 1000000))
+    split_seed <- round(runif(1, -1000000000, 1000000000))
   }
-  # break the data for holdout validation
-  splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=split_seed)
-  train  <- h2o.assign(splits[[1]], "train.hex") # 80%
-  valid  <- h2o.assign(splits[[2]], "valid.hex") # 20%
+
+  if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
+    splits <- h2o.splitFrame(train,
+      c(1 - (percent_valid_holdout/100), 1 - (percent_test_holdout/100)), seed = split_seed)
+    train  <- h2o.assign(splits[[1]], "train.hex")
+    valid  <- h2o.assign(splits[[2]], "valid.hex")
+    test  <- h2o.assign(splits[[3]], "test.hex")
+  } else {
+    splits <- h2o.splitFrame(train, 1 - (percent_test_holdout/100), seed = split_seed)
+    train  <- h2o.assign(splits[[1]], "train.hex")
+    test  <- h2o.assign(splits[[2]], "test.hex")
+  }
 
   # define the target and predictors
   y <- y_name
@@ -38,7 +49,7 @@ if(y_type == "discrete") {
   df1[,y] <- as.numeric(df1[,y])
 }
 
-deeplearning_parameter_search <- list(
+dl_parameter_search <- list(
   rate= c(1e-9, 1e-8, 1e-7, 1e-6),
   rate_annealing= c(1e-12, 1e-9, 1e-6),
   momentum_start= c(0.8, 0.9),
@@ -64,7 +75,7 @@ if(deeplearning_adaptive_rate == FALSE) {
   hyper_params <- deeplearning_parameter_search[seq(1:13)]
 }
 
-search_criteria = list(strategy = grid_strategy,
+dl_search_criteria = list(strategy = grid_strategy,
                        max_runtime_secs = deeplearning_runtime_secs,
                        stopping_rounds = deeplearning_stopping_rounds,
                        stopping_tolerance = deeplearning_stopping_tolerance,
@@ -83,8 +94,8 @@ dl_grid_rand <- h2o.grid(
   epochs=1000,
   overwrite_with_best_model = TRUE,
   adaptive_rate = deeplearning_adaptive_rate,
-  hyper_params = hyper_params,
-  search_criteria = search_criteria,
+  hyper_params = dl_parameter_search,
+  search_criteria = dl_search_criteria,
   stopping_metric = eval_metric,
   seed = 1234
 )

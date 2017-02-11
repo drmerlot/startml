@@ -6,8 +6,9 @@ start.rfgrid <- function(train,
                           eval_metric = "AUTO",
                           wd = getwd(),
                           validation_type = "SharedHoldout", #need to add the others
-                          percent_holdout = 10,
-                          folds = 3,
+                          percent_valid_holdout = 10,
+                          percent_test_holdout = 10,
+                          folds = NULL,
                           rf_min_depth = 1,
                           rf_max_depth = 7,
                           rf_runtime_secs = 20,
@@ -19,13 +20,19 @@ start.rfgrid <- function(train,
   cat("Training Random Forest Models\n")
   # break the data for holdout validation
   if(is.null(split_seed)) {
-    split_seed <- round(runif(1, -1000000, 1000000))
+    split_seed <- round(runif(1, -1000000000, 1000000000))
   }
   # need condition for other holdouts
-  if(validation_type == "SharedHoldout") {
-    splits <- h2o.splitFrame(train, 1 - (percent_holdout/100), seed = split_seed)
+  if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
+    splits <- h2o.splitFrame(train,
+      c(1 - (percent_valid_holdout/100), 1 - (percent_test_holdout/100)), seed = split_seed)
     train  <- h2o.assign(splits[[1]], "train.hex")
     valid  <- h2o.assign(splits[[2]], "valid.hex")
+    test  <- h2o.assign(splits[[3]], "test.hex")
+  } else {
+    splits <- h2o.splitFrame(train, 1 - (percent_test_holdout/100), seed = split_seed)
+    train  <- h2o.assign(splits[[1]], "train.hex")
+    test  <- h2o.assign(splits[[2]], "test.hex")
   }
   # define the target and predictors
   y <- y_name
@@ -43,7 +50,7 @@ start.rfgrid <- function(train,
   }
 
 ### here for grid
-hyper_params = list(
+rf_parameter_search = list(
   max_depth = seq(rf_min_depth, rf_max_depth, 1),
   sample_rate = c(0.2, 0.4, 0.5, 0.7, 0.9),
   col_sample_rate_per_tree = c(0.2, 0.4, 0.5, 0.9, 1),
@@ -55,7 +62,7 @@ hyper_params = list(
   histogram_type = c("UniformAdaptive","QuantilesGlobal","RoundRobin")
 )
 
-search_criteria = list(
+rf_search_criteria = list(
   strategy = grid_strategy,
   max_runtime_secs = rf_runtime_secs,
   stopping_rounds = rf_stopping_rounds,
@@ -65,8 +72,8 @@ search_criteria = list(
 )
 
 rf_grid_rand <- h2o.grid(
-  hyper_params = hyper_params,
-  search_criteria = search_criteria,
+  hyper_params = rf_parameter_search,
+  search_criteria = rf_search_criteria,
   algorithm = "randomForest",
   grid_id = "rf",
   x = x,

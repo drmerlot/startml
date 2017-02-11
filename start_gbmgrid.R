@@ -6,7 +6,9 @@ start.gbmgrid <- function(train,
                           eval_metric = "AUTO",
                           validation_type = "SharedHoldout",
                           wd = getwd(),
-                          percent_holdout = 0.1,
+                          percent_valid_holdout = 10,
+                          percent_test_holdout = 10,
+                          folds = NULL,
                           gbm_min_depth = 1,
                           gbm_max_depth = 7,
                           gbm_runtime_secs = 10,
@@ -18,11 +20,20 @@ start.gbmgrid <- function(train,
   cat("Training Gradient Boosting Models\n")
   # break the data for holdout validation
   if(is.null(split_seed)) {
-    split_seed <- round(runif(1, -1000000, 1000000))
+    split_seed <- round(runif(1, -1000000000, 1000000000))
   }
-  splits <- h2o.splitFrame(train, 1 - percent_holdout, seed=split_seed)
-  train  <- h2o.assign(splits[[1]],  "train.hex") # 80%
-  valid  <- h2o.assign(splits[[2]], "valid.hex") # 20%
+
+  if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
+    splits <- h2o.splitFrame(train,
+      c(1 - (percent_valid_holdout/100), 1 - (percent_test_holdout/100)), seed = split_seed)
+    train  <- h2o.assign(splits[[1]], "train.hex")
+    valid  <- h2o.assign(splits[[2]], "valid.hex")
+    test  <- h2o.assign(splits[[3]], "test.hex")
+  } else {
+    splits <- h2o.splitFrame(train, 1 - (percent_test_holdout/100), seed = split_seed)
+    train  <- h2o.assign(splits[[1]], "train.hex")
+    test  <- h2o.assign(splits[[2]], "test.hex")
+  }
 
   # define the target and predictors
   y <- y_name
@@ -41,7 +52,7 @@ start.gbmgrid <- function(train,
 
   # needs to be reviewed for smart values ...
   # score_tree_interval = c(2, 5, 10),
-  hyper_params = list(
+  gbm_parameter_search = list(
     max_depth = seq(gbm_min_depth, gbm_max_depth, 1),
     sample_rate = seq(0.2, 1, 0.01),
     col_sample_rate = seq(0.2,0.9,1),
@@ -56,7 +67,7 @@ start.gbmgrid <- function(train,
     histogram_type = c("UniformAdaptive","QuantilesGlobal","RoundRobin")
   )
 
-  search_criteria = list(
+  gbm_search_criteria = list(
     strategy = grid_strategy,
     max_runtime_secs = gbm_runtime_secs,
     stopping_rounds =  gbm_stopping_rounds,
@@ -73,8 +84,8 @@ start.gbmgrid <- function(train,
     training_frame = train,
     validation_frame = valid,
     ntrees = 4000,
-    hyper_params = hyper_params,
-    search_criteria = search_criteria,
+    hyper_params = gbm_parameter_search,
+    search_criteria = gbm_search_criteria,
     seed = 1234
   )
 
