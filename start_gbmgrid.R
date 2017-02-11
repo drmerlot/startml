@@ -25,7 +25,7 @@ start.gbmgrid <- function(train,
 
   if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
     splits <- h2o.splitFrame(train,
-      c(1 - (percent_valid_holdout/100), 1 - (percent_test_holdout/100)), seed = split_seed)
+      c((1 - ((percent_valid_holdout/100) + (percent_test_holdout/100))), (percent_test_holdout/100)), seed = split_seed)
     train  <- h2o.assign(splits[[1]], "train.hex")
     valid  <- h2o.assign(splits[[2]], "valid.hex")
     test  <- h2o.assign(splits[[3]], "test.hex")

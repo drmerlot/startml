@@ -6,8 +6,8 @@ start.rfgrid <- function(train,
                           eval_metric = "AUTO",
                           wd = getwd(),
                           validation_type = "SharedHoldout", #need to add the others
-                          percent_valid_holdout = 10,
-                          percent_test_holdout = 10,
+                          percent_valid_holdout = 20,
+                          percent_test_holdout = 20,
                           folds = NULL,
                           rf_min_depth = 1,
                           rf_max_depth = 7,
@@ -25,7 +25,7 @@ start.rfgrid <- function(train,
   # need condition for other holdouts
   if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
     splits <- h2o.splitFrame(train,
-      c(1 - (percent_valid_holdout/100), 1 - (percent_test_holdout/100)), seed = split_seed)
+      c((1 - ((percent_valid_holdout/100) + (percent_test_holdout/100))), (percent_test_holdout/100)), seed = split_seed)
     train  <- h2o.assign(splits[[1]], "train.hex")
     valid  <- h2o.assign(splits[[2]], "valid.hex")
     test  <- h2o.assign(splits[[3]], "test.hex")
