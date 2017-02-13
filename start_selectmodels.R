@@ -19,12 +19,17 @@ start.selectmodels <- function(model_list,
     low_cor_models <- model_list
   } else {
   prediction_list <- start.predict(test, model_list)
-  predictions <- h2o.cbind(prediction_list)
+    if(eval_metric == "AUC" | eval_metric == "logloss") {
+      predictions_subset <- lapply(prediction_list, function(x)x[,3])
+      predictions <- h2o.cbind(predictions_subset)
+    } else {
+    predictions <- h2o.cbind(prediction_list)
+    }
   correlations <- h2o.cor(predictions)
   colnames(correlations) <- seq(1:length(model_list))
   correlations[!lower.tri(correlations)] <- 0
   low_cor_models <- model_list[as.numeric(colnames(correlations[,!apply(correlations,2,
-    function(x) any(x > correlation_threhold))]))]
+    function(x) any(x > correlation_threshold))]))]
   }
   if(length(low_cor_models) == 0){
     min_message <- min(correlations[correlations != 0])
@@ -44,11 +49,4 @@ start.selectmodels <- function(model_list,
   }
 }
 
-
-test_out <- start.selectmodels(model_list = models,
-                               test = test,
-                   eval_metric = "RMSE",
-                    eval_threshold = .5,
-                   y_name = "target",
-                   correlation_threshold = 0.6)
 
