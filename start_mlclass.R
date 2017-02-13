@@ -1,5 +1,4 @@
 # trying to set a class
-
 setClass("ml", slots = c(models = "list",
                          train = "list",
                          valid = "list",
@@ -12,4 +11,3 @@ setClass("ml", slots = c(models = "list",
                          index = "data.frame"
                          ))
 
-mlout <- new("ml", models = model_list )
