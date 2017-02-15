@@ -6,7 +6,7 @@ start.ml <- function(train, new_data,
                      eval_metric = "AUC",
                      validation_type = "SharedHoldout", # add RandomHoldout and cv
                      split_seed = NULL,
-                     number_top_models = NULL,
+                     top_models = NULL,
                      eval_threshold = 0.7,
                      correlation_threshold = 0.6,
                      return_dataframe = FALSE) {
