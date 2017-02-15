@@ -56,5 +56,24 @@ start.ml <- function(train, new_data,
     predictions
   } else {
     stop("start.ml does not currently support auto conversion to standard r object")
-    }
+  }
+  # =================================================
+  # needs work.
+  # make the index dataframe, trivially all 1s for shared holout
+  index = data.frame(model_num = seq(1, length(model_list)),
+                     train_id = rep(1, length(model_list)),
+                     valid_id = rep(1, length(model_list)),
+                     test_id = rep(1, length(model_list))
+  )
+
+  # build the output object of new class mlstack
+  mlout <- new("mlstack",
+             models = model_list,
+             train = list(train),
+             valid = list(valid),
+             test = list(test),
+             newdata = list(new_data),
+             index = index)
+  # =================================================
+  mlout
 }
