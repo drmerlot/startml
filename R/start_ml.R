@@ -67,7 +67,7 @@ start.ml <- function(train, new_data,
   )
 
   # build the output object of new class mlstack
-  mlout <- new("mlstack",
+  mlout <- new("mlblob",
              models = model_list,
              train = list(train),
              valid = list(valid),

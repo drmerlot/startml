@@ -1,5 +1,5 @@
 # trying to set a class
-setClass("mlstack", slots = c(models = "list",
+setClass("mlblob", slots = c(models = "list",
                          train = "list",
                          valid = "list",
                          test = "list",
