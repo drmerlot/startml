@@ -5,6 +5,8 @@ start.ml <- function(train, new_data,
                      algorithms = c("deeplearning", "randomForest", "gbm"),
                      eval_metric = "AUC",
                      validation_type = "SharedHoldout", # add RandomHoldout and cv
+                     percent_valid_holdout = 10,
+                     percent_test_holdout = 10,
                      split_seed = NULL,
                      top_models = NULL,
                      eval_threshold = 0.7,
@@ -68,7 +70,7 @@ start.ml <- function(train, new_data,
 
   # build the output object of new class mlstack
   mlout <- new("mlblob",
-             models = model_list,
+             models = selected_models,
              train = list(train),
              valid = list(valid),
              test = list(test),
