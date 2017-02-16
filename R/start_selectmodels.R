@@ -40,13 +40,11 @@ start.selectmodels <- function(model_list,
     } else {
       metrics <- unlist(start.testmetric(prediction_list, test = test, y_name = y_name, eval_metric = eval_metric))
       keep_models <- low_cor_models[eval_fun(metrics, eval_threshold)]
+      if(length(keep_models) == 0){
+        stop(paste("No models selected, choose different eval_threshold"))
+      } else {
+        keep_models
+      }
     }
   }
-  if(length(keep_models) == 0){
-    stop(paste("No models selected, choose different eval_threshold"))
-  } else {
-  keep_models
-  }
 }
-
-
