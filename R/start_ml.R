@@ -53,29 +53,40 @@ start.ml <- function(train, new_data,
                                           y_name = y_name,
                                           correlation_threshold = correlation_threshold)
   }
-    predictions <- start.predict(test = new_data, selected_models) # !!! this houses the actual test data
+    cat("\nPredicting on Train with Selected Models\n")
+    train_predictions <- start.predict(test = train, selected_models) # !!! this houses the actual test data
+    cat("\nPredicting on Valid with Selected Models\n")
+    valid_predictions <- start.predict(test = valid, selected_models) # !!! this houses the actual test data
+    cat("\nPredicting on Test with Selected Models\n")
+    test_predictions <- start.predict(test = test, selected_models)
+    cat("\nPredicting on New Data with Selected Models\n")
+    newdata_predictions <- start.predict(test = new_data, selected_models) # !!! this houses the actual test data
   if(return_dataframe == FALSE) {
-    predictions
+    # needs work.
+    # make the index dataframe, trivially all 1s for shared holout
+    index = data.frame(model_num = seq(1, length(selected_models)),
+                       train_id = rep(1, length(selected_models)),
+                       valid_id = rep(1, length(selected_models)),
+                       test_id = rep(1, length(selected_models))
+    )
+
+    # build the output object of new class mlstack
+    mlout <- new("mlblob",
+                 models = selected_models,
+                 train = list(train),
+                 valid = list(valid),
+                 test = list(test),
+                 newdata = list(new_data),
+                 predict_train = train_predictions,
+                 predict_valid = valid_predictions,
+                 predict_test = test_predictions,
+                 predict_newdata = newdata_predictions,
+                 index = index)
+    # =================================================
+    mlout
   } else {
     stop("start.ml does not currently support auto conversion to standard r object")
   }
-  # =================================================
-  # needs work.
-  # make the index dataframe, trivially all 1s for shared holout
-  index = data.frame(model_num = seq(1, length(selected_models)),
-                     train_id = rep(1, length(selected_models)),
-                     valid_id = rep(1, length(selected_models)),
-                     test_id = rep(1, length(selected_models))
-  )
-
-  # build the output object of new class mlstack
-  mlout <- new("mlblob",
-             models = selected_models,
-             train = list(train),
-             valid = list(valid),
-             test = list(test),
-             newdata = list(new_data),
-             index = index)
-  # =================================================
-  mlout
 }
+
+
