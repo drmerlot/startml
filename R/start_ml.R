@@ -8,7 +8,7 @@ start.ml <- function(train, new_data,
                      percent_valid_holdout = 10,
                      percent_test_holdout = 10,
                      split_seed = NULL,
-                     top_models = NULL,
+                     number_top_models = NULL,
                      eval_threshold = 0.7,
                      correlation_threshold = 0.6,
                      return_dataframe = FALSE) {
@@ -37,9 +37,26 @@ start.ml <- function(train, new_data,
     train  <- h2o.assign(splits[[1]], "train.hex")
     test  <- h2o.assign(splits[[2]], "test.hex")
   }
+
+  # define the target and predictors
+  y <- y_name
+  x <- setdiff(names(df1), y)
+
+  # set variable type for proper auto options
+  if(y_type == "discrete") {
+    train[,y] <- as.factor(train[,y])
+    valid[,y] <- as.factor(valid[,y])
+    test[,y] <- as.factor(test[,y])
+    df1[,y] <- as.factor(df1[,y])
+  } else {
+    train[,y] <- as.numeric(train[,y])
+    valid[,y] <- as.numeric(valid[,y])
+    test[,y] <- as.numeric(test[,y])
+    df1[,y] <- as.numeric(df1[,y])
+  }
   # ===================================================================
 
-  if(!is.null(top_models)) {
+  if(!is.null(number_top_models)) {
     cat("\nChoosing Top Performing Models on Validation")
     sorted_models <- start.sortmodels(all_models,
                                       eval_metric = eval_metric)
@@ -47,7 +64,7 @@ start.ml <- function(train, new_data,
                                        all_models,
                                        number_top_models = number_top_models)
   } else {
-    cat("\nChoosing Models on Test based on Performance and Correlation Thresholds")
+    cat("\nChoosing Models on Test based on Performance and Correlation Thresholds\n")
     selected_models <- start.selectmodels(model_list = all_models,
                                           test = test, #!!! needs to be 'test' from split not new data
                                           eval_metric = eval_metric,
@@ -56,13 +73,13 @@ start.ml <- function(train, new_data,
                                           correlation_threshold = correlation_threshold)
   }
     cat("\nPredicting on Train with Selected Models\n")
-    train_predictions <- start.predict(test = train, selected_models) # !!! this houses the actual test data
+    train_predictions <- start.predict(test = train, selected_models)
     cat("\nPredicting on Valid with Selected Models\n")
-    valid_predictions <- start.predict(test = valid, selected_models) # !!! this houses the actual test data
+    valid_predictions <- start.predict(test = valid, selected_models)
     cat("\nPredicting on Test with Selected Models\n")
     test_predictions <- start.predict(test = test, selected_models)
     cat("\nPredicting on New Data with Selected Models\n")
-    newdata_predictions <- start.predict(test = new_data, selected_models) # !!! this houses the actual test data
+    newdata_predictions <- start.predict(test = new_data, selected_models)
   if(return_dataframe == FALSE) {
     # needs work.
     # make the index dataframe, trivially all 1s for shared holout
