@@ -32,6 +32,7 @@ start.qplot <- function(mlout) {
       stop("Does not yet support binomial model summary")
     } else if(class(mlout@models[[1]]) == "H2ORegressionModel") {
       train_rmse <- lapply(mlout@models, get_hist)
+      longest <- max(unlist(lapply(train_rmse, length)))
       train_hist <- even_lengths(train_rmse)
       hist_df <- as.data.frame(do.call('cbind', train_hist))
       ids <- sapply(mlout@models, get_ids)
