@@ -42,7 +42,8 @@ start.qplot <- function(mlout) {
       hist_df$iteration <- iter
       hist_melted <- melt(hist_df, ncol(hist_df))
       p <- ggplot(hist_melted) +
-        geom_line(aes(x = iteration, y = value, color = variable))
+        geom_line(aes(x = iteration, y = value, color = variable),
+                  alpha = 0.7, size = 1.2)
       plot(p)
     }
   } else {
