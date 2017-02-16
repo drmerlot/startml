@@ -40,12 +40,14 @@ start.ml <- function(train, new_data,
   # ===================================================================
 
   if(!is.null(top_models)) {
+    cat("\nChoosing Top Performing Models on Validation")
     sorted_models <- start.sortmodels(all_models,
                                       eval_metric = eval_metric)
     selected_models <- start.topmodels(sorted_models,
                                        all_models,
                                        number_top_models = number_top_models)
   } else {
+    cat("\nChoosing Models on Test based on Performance and Correlation Thresholds")
     selected_models <- start.selectmodels(model_list = all_models,
                                           test = test, #!!! needs to be 'test' from split not new data
                                           eval_metric = eval_metric,
