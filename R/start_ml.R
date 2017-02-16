@@ -62,10 +62,10 @@ start.ml <- function(train, new_data,
   # =================================================
   # needs work.
   # make the index dataframe, trivially all 1s for shared holout
-  index = data.frame(model_num = seq(1, length(model_list)),
-                     train_id = rep(1, length(model_list)),
-                     valid_id = rep(1, length(model_list)),
-                     test_id = rep(1, length(model_list))
+  index = data.frame(model_num = seq(1, length(selected_models)),
+                     train_id = rep(1, length(selected_models)),
+                     valid_id = rep(1, length(selected_models)),
+                     test_id = rep(1, length(selected_models))
   )
 
   # build the output object of new class mlstack
