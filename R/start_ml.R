@@ -15,11 +15,11 @@ start.ml <- function(train, new_data,
   }
 
   all_models <- start.autotrain(train = train,
-                                    y_name = y_name,
-                                    y_type = y_type,
-                                    algorithms = algorithms,
-                                    eval_metric = eval_metric,
-                                    split_seed = split_seed)
+                                y_name = y_name,
+                                y_type = y_type,
+                                algorithms = algorithms,
+                                eval_metric = eval_metric,
+                                split_seed = split_seed)
   # This needs to be replaced ==========================================
   # only works with shared holdout.
   # need condition for other holdout.
@@ -44,14 +44,14 @@ start.ml <- function(train, new_data,
                                        all_models,
                                        number_top_models = number_top_models)
   } else {
-  selected_models <- start.selectmodels(model_list = all_models,
-                                        test = test, #!!! needs to be 'test' from split not new data
-                                        eval_metric = eval_metric,
-                                        eval_threshold = eval_threshold,
-                                        y_name = y_name,
-                                        correlation_threshold = correlation_threshold)
+    selected_models <- start.selectmodels(model_list = all_models,
+                                          test = test, #!!! needs to be 'test' from split not new data
+                                          eval_metric = eval_metric,
+                                          eval_threshold = eval_threshold,
+                                          y_name = y_name,
+                                          correlation_threshold = correlation_threshold)
   }
-  predictions <- start.predict(test = new_data, selected_models) # !!! this houses the actual test data
+    predictions <- start.predict(test = new_data, selected_models) # !!! this houses the actual test data
   if(return_dataframe == FALSE) {
     predictions
   } else {
