@@ -42,10 +42,12 @@ start.dlgrid<- function(train,
 if(y_type == "discrete") {
   train[,y] <- as.factor(train[,y])
   valid[,y] <- as.factor(valid[,y])
+  test[,y] <- as.factor(test[,y])
   df1[,y] <- as.factor(df1[,y])
 } else {
   train[,y] <- as.numeric(train[,y])
   valid[,y] <- as.numeric(valid[,y])
+  test[,y] <- as.numeric(test[,y])
   df1[,y] <- as.numeric(df1[,y])
 }
 
