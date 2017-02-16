@@ -6,7 +6,7 @@
 
 # temporary place for extra functions ==================
 get_hist <- function(x) {
-  x@model$scoring_history$validation_logloss
+  x@model$scoring_history$validation_rmse
 }
 
 get_ids <- function(x) {
@@ -20,9 +20,9 @@ paste_nas <- function(x, longest) {
 }
 # =======================================
 
-even_lengths <- function(train_logloss) {
-  longest <- max(unlist(lapply(train_logloss, length)))
-  train_hist <- lapply(train_logloss, paste_nas, longest = longest)
+even_lengths <- function(train_rmse) {
+  max_length <- max(unlist(lapply(train_rmse, length)))
+  train_hist <- lapply(train_rmse, paste_nas, longest = max_length)
   train_hist
 }
 
@@ -31,8 +31,8 @@ start.qplot <- function(mlout) {
     if(class(mlout@models[[1]]) == "H2OBinomialModel") {
       stop("Does not yet support binomial model summary")
     } else if(class(mlout@models[[1]]) == "H2ORegressionModel") {
-      train_logloss <- lapply(mlout@models, get_hist)
-      train_hist <- lapply(train_logloss, paste_nas, longest = longest)
+      train_rmse <- lapply(mlout@models, get_hist)
+      train_hist <- even_lengths(train_rmse)
       hist_df <- as.data.frame(do.call('cbind', train_hist))
       ids <- sapply(mlout@models, get_ids)
       ids_split <- sapply(names(ids), strsplit, split = "/")
