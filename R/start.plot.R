@@ -31,10 +31,10 @@ start.qplot <- function(mlout) {
     if(class(mlout@models[[1]]) == "H2OBinomialModel") {
       stop("Does not yet support binomial model summary")
     } else if(class(mlout@models[[1]]) == "H2ORegressionModel") {
-      train_logloss <- lapply(ml_out@models, get_hist)
+      train_logloss <- lapply(mlout@models, get_hist)
       train_hist <- lapply(train_logloss, paste_nas, longest = longest)
       hist_df <- as.data.frame(do.call('cbind', train_hist))
-      ids <- sapply(ml_out@models, get_ids)
+      ids <- sapply(mlout@models, get_ids)
       ids_split <- sapply(names(ids), strsplit, split = "/")
       ids_final <- sapply(ids_split, `[`, length(ids_split[[1]]))
       iter <- seq(0, longest - 1, by = 1)
