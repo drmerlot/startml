@@ -7,6 +7,7 @@ start.ml <- function(train, new_data,
                      validation_type = "SharedHoldout", # add RandomHoldout and cv
                      percent_valid_holdout = 10,
                      percent_test_holdout = 10,
+                     runtime_secs = 10,
                      split_seed = NULL,
                      number_top_models = NULL,
                      eval_threshold = 0.7,
@@ -21,6 +22,7 @@ start.ml <- function(train, new_data,
                                 y_type = y_type,
                                 algorithms = algorithms,
                                 eval_metric = eval_metric,
+                                runtime_secs = runtime_secs,
                                 split_seed = split_seed)
   # This needs to be replaced ==========================================
   # only works with shared holdout.

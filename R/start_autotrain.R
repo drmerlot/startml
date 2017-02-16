@@ -6,7 +6,7 @@ start.autotrain <- function(train,
                     algorithms = c("deeplearning", "randomForest", "gbm"),
                     eval_metric = "AUTO",
                     validation_type = "SharedHoldout", # add RandomHoldout and cv
-                    runtime_secs = 5,
+                    runtime_secs = 10,
                     split_seed = NULL,
                     wd = getwd()) {
 
