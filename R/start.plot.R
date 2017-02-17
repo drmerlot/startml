@@ -42,15 +42,53 @@ start.qplot <- function(mlout) {
       colnames(hist_df) <- ids_final
       hist_df$iteration <- iter
       hist_melted <- melt(hist_df, ncol(hist_df))
-      p <- ggplot(hist_melted) +
+      p_history <- ggplot(hist_melted) +
         geom_line(aes(x = iteration, y = value, color = variable),
                   alpha = 0.7, size = 1.2) +
         ggtitle("Training History of Models on Valid") +
         ylab("RMSE") +
         xlab("Iterations")
-      plot(p)
+      #plot(p)
+
+
     }
   } else {
     ggpot2::qplot(mlout)
   }
 }
+
+
+# prepare target data.
+# only works with shared holdout.
+  y = "SalePrice"
+  all_target <- as.data.frame(df1[,y])[,1]
+  max_length <- nrow(all_target)
+  train_target <- c(as.data.frame(mlout@train[[1]][,y])[,1],
+                    rep(NA, max_length - nrow(mlout@train[[1]][,y])))
+  valid_target <- c(as.data.frame(mlout@valid[[1]][,y])[,1],
+                    rep(NA, max_length - nrow(mlout@valid[[1]][,y])))
+  test_target <- c(as.data.frame(mlout@test[[1]][,y])[,1],
+                   rep(NA, max_length - nrow(mlout@test[[1]][,y])))
+  target_df <- data.frame(all = all_target,
+                  train = train_target,
+                  valid = valid_target,
+                  test = test_target)
+
+  # now melt
+  target_melted <- melt(target_df)
+# now plot
+  p_target <- ggplot(target_melted) +
+    geom_histogram(aes(x = value, y = ..density..), bins = 20) +
+    geom_vline(data = ddply(target_melted , "variable", summarize, wavg = mean(na.omit(value))), aes(xintercept=wavg), color = "red") +
+    geom_vline(data = ddply(target_melted , "variable", summarize, wavg = median(na.omit(value))), aes(xintercept=wavg), color = "blue") +
+    geom_density(aes(value), color = "black") +
+    facet_wrap(~variable) +
+    #scale_x_continuous(limits = c(0, 0.5)) +
+    scale_color_manual(name = '', values = c("blue" = "blue",
+                                           "red" = "red",
+                                           "black" = "black"),
+                     labels = c( 'Median','Mean', "Kernel Smooth")) +
+    xlab("Target Value") +
+    ylab("Density") +
+    ggtitle("Target Input Data Splits")
+    #theme_gray(base_size = 18)
