@@ -8,7 +8,9 @@ setClass("mlblob", slots = c(models = "list",
                          predict_valid = "list",
                          predict_test = "list",
                          predict_newdata = "list",
-                         index = "data.frame"))
+                         index = "data.frame",
+                         y = "character",
+                         x = "character"))
 
 
 # doesn't work  ==============================
