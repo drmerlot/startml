@@ -102,7 +102,9 @@ start.ml <- function(train, new_data,
                  predict_valid = valid_predictions,
                  predict_test = test_predictions,
                  predict_newdata = newdata_predictions,
-                 index = index)
+                 index = index,
+                 y = y,
+                 x = x)
     # =================================================
     mlout
   } else {
