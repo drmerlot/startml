@@ -33,6 +33,10 @@ hist_text <- function(id_final, hist_melted) {
   sub
 }
 
+rename_predictions <- function(prediction) {
+  names(prediction) <-
+  }
+
 # =======================================
 
 even_lengths <- function(train_rmse) {
@@ -41,7 +45,7 @@ even_lengths <- function(train_rmse) {
   train_hist
 }
 
-start.qplot <- function(mlout) {
+start.qplot <- function(mlout) { suppressWarnings(
   if(class(mlout)[1] == "mlblob") {
     if(class(mlout@models[[1]]) == "H2OBinomialModel") {
       stop("Does not yet support binomial model summary")
@@ -71,9 +75,9 @@ start.qplot <- function(mlout) {
         ggtitle("Training History of Models on Valid") +
         ylab("RMSE") +
         xlab("Iterations")
-      # make the hitograms
+      # make the histograms
       y = mlout@y
-      all_target <- as.data.frame(df1[,y])[,1]
+      all_target <- as.data.frame(mlout@labeled_data[,y])[,1]
       max_length <- length(all_target)
       train_target <- c(as.data.frame(mlout@train[[1]][,y])[,1],
                         rep(NA, max_length - nrow(mlout@train[[1]][,y])))
@@ -93,23 +97,39 @@ start.qplot <- function(mlout) {
         geom_histogram(aes(x = value, y = ..density..), bins = 20) +
         geom_vline(data = ddply(target_melted , "variable",
                                 summarize, wavg = mean(na.omit(value))),
-                   aes(xintercept=wavg, color = "red")) +
+                   aes(xintercept=wavg, color = "green")) +
         geom_vline(data = ddply(target_melted , "variable", summarize,
                                 wavg = median(na.omit(value))),
-                   aes(xintercept=wavg, color = "blue")) +
+                   aes(xintercept=wavg, color = "orange")) +
         geom_density(aes(value, color = "black"), alpha = 0.8) +
         facet_wrap(~variable) +
-        scale_color_manual(name = '', values = c("blue" = "blue",
-                                                 "red" = "red",
+        scale_color_manual(name = '', values = c("green" = "green",
+                                                 "orange" = "orange",
                                                  "black" = "black"),
-                           labels = c("Kernel Smooth", 'Median','Mean')) +
+                           labels = c("Kernel", 'Median','Mean')) +
         xlab("Target Value") +
         ylab("Density") +
-        ggtitle("Target Input Data Splits")
-        grid.arrange(p_history, p_target, ncol = 1, nrow = 2)
+        ggtitle("Target Input Data Splits") +
+        theme(axis.text.x=element_text(angle = -45, hjust = 0))
+      # make the xy plot ======================
+      for(i in 1:length(mlout@predict_test)) {
+        names(mlout@predict_test[[i]]) <- ids_final[[i]]
+        }
+      xy_df <- do.call(h2o.cbind, mlout@predict_test)
+      xy_df$labeled <- mlout@test[[1]][,y]
+      xy_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
+      p_xy <- ggplot(xy_melted) +
+        geom_point(aes(x = labeled, y = value, color = variable)) +
+        geom_point(aes(x = labeled, y = labeled), color = "black", alpha = 0.2) +
+        guides(color = FALSE) +
+        xlab("Labeled") +
+        ylab("Predicted") +
+        ggtitle("Labels vs Predictions on Test")
+
+      grid.arrange(p_history, p_target, p_xy, ncol = 2, nrow = 2)
     }
   } else {
     ggpot2::qplot(mlout)
   }
-}
+)}
 
