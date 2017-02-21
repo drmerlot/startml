@@ -77,7 +77,7 @@ start.qplot <- function(mlout) { suppressWarnings(
         xlab("Iterations")
       # make the histograms
       y = mlout@y
-      all_target <- as.data.frame(mlout@labeled_data[,y])[,1]
+      all_target <- as.data.frame(mlout@labeled_data[[1]][,y])[,1]
       max_length <- length(all_target)
       train_target <- c(as.data.frame(mlout@train[[1]][,y])[,1],
                         rep(NA, max_length - nrow(mlout@train[[1]][,y])))
@@ -109,7 +109,7 @@ start.qplot <- function(mlout) { suppressWarnings(
                            labels = c("Kernel", 'Median','Mean')) +
         xlab("Target Value") +
         ylab("Density") +
-        ggtitle("Target Input Data Splits") +
+        ggtitle(paste(y, "in Labeled Data Splits")) +
         theme(axis.text.x=element_text(angle = -45, hjust = 0))
       # make the xy plot ======================
       for(i in 1:length(mlout@predict_test)) {
@@ -125,8 +125,17 @@ start.qplot <- function(mlout) { suppressWarnings(
         xlab("Labeled") +
         ylab("Predicted") +
         ggtitle("Labels vs Predictions on Test")
-
-      grid.arrange(p_history, p_target, p_xy, ncol = 2, nrow = 2)
+      # the order plot ======================
+      predictions_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
+      p_order <- ggplot(predictions_melted[order(predictions_melted$labeled),]) +
+        geom_point(aes(x = seq(1, nrow(predictions_melted)), y = value, color = variable), alpha = 0.3) +
+        geom_point(aes(x = seq(1, nrow(predictions_melted)), y = labeled), color = 'black', alpha = 0.5) +
+        scale_color_discrete(guide=FALSE) +
+        ylab(y) +
+        xlab(paste("Index: Ordered By Asending", y)) +
+        ggtitle("Labels and Predictions on Test")
+      # Plot everything on the grid
+      grid.arrange(p_history, p_order, p_target, p_xy, ncol = 2, nrow = 2)
     }
   } else {
     ggpot2::qplot(mlout)
