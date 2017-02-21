@@ -74,11 +74,11 @@ start.ml <- function(labeled_data, new_data,
                                           y_name = y_name,
                                           correlation_threshold = correlation_threshold)
   }
-    cat("\nPredicting on Train with Selected Models\n")
+    cat("\nSaving Train Predictions with Selected Models\n")
     train_predictions <- start.predict(test = train, selected_models)
-    cat("\nPredicting on Valid with Selected Models\n")
+    cat("\nSaving Valid Predictions with Selected Models\n")
     valid_predictions <- start.predict(test = valid, selected_models)
-    cat("\nPredicting on Test with Selected Models\n")
+    cat("\nSaving Test Predictions with Selected Models\n")
     test_predictions <- start.predict(test = test, selected_models)
     cat("\nPredicting on New Data with Selected Models\n")
     newdata_predictions <- start.predict(test = new_data, selected_models)
