@@ -1,6 +1,6 @@
 #===================================================================
 # more controls needed
-start.ml <- function(train, new_data,
+start.ml <- function(labeled_data, new_data,
                      y_name, y_type,
                      algorithms = c("deeplearning", "randomForest", "gbm"),
                      eval_metric = "AUC",
@@ -17,7 +17,7 @@ start.ml <- function(train, new_data,
     stop("Set 'split_seed' to any real number for common random sampling when validation = SharedHoldout")
   }
 
-  all_models <- start.autotrain(train = train,
+  all_models <- start.autotrain(train = labeled_data,
                                 y_name = y_name,
                                 y_type = y_type,
                                 algorithms = algorithms,
@@ -29,7 +29,7 @@ start.ml <- function(train, new_data,
   # need condition for other holdout.
   # fix by creating an ml object class that deals with this.
   if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
-    splits <- h2o.splitFrame(train,
+    splits <- h2o.splitFrame(labeled_data,
                              c((1 - ((percent_valid_holdout/100) + (percent_test_holdout/100))), (percent_test_holdout/100)), seed = split_seed)
     train  <- h2o.assign(splits[[1]], "train.hex")
     valid  <- h2o.assign(splits[[2]], "valid.hex")
@@ -94,10 +94,11 @@ start.ml <- function(train, new_data,
     # build the output object of new class mlstack
     mlout <- new("mlblob",
                  models = selected_models,
+                 labeled_data = labeled_data,
                  train = list(train),
                  valid = list(valid),
                  test = list(test),
-                 newdata = list(new_data),
+                 new_data = list(new_data),
                  predict_train = train_predictions,
                  predict_valid = valid_predictions,
                  predict_test = test_predictions,
