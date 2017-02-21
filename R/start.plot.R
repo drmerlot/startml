@@ -18,6 +18,21 @@ paste_nas <- function(x, longest) {
   x_na <- c(x, rep(NA, longest - length(x)))
   x_na
 }
+
+# finding the x y for text labels in traning histories
+hist_text <- function(id_final, hist_melted) {
+  sub <- hist_melted[hist_melted$variable %in% id_final,]
+  lab_x <- max(sub$iteration)
+  lab_y <- sub$value[which(sub$iteration == lab_x)]
+  col_x <- rep(lab_x, nrow(sub))
+  col_y <- rep(lab_y, nrow(sub))
+  sub$lab_x <- col_x
+  sub$lab_y <- col_y
+  sub$lab_x[which(sub$iteration != lab_x)] <- NA
+  sub$lab_y[which(sub$iteration != lab_x)] <- NA
+  sub
+}
+
 # =======================================
 
 even_lengths <- function(train_rmse) {
@@ -42,13 +57,20 @@ start.qplot <- function(mlout) {
       colnames(hist_df) <- ids_final
       hist_df$iteration <- iter
       hist_melted <- melt(hist_df, ncol(hist_df))
-      p_history <- ggplot(hist_melted) +
+      hist_melted <- hist_melted[-which(is.na(hist_melted$value)),]
+      ids_final <- as.list(ids_final)
+      hist_lab <- lapply(ids_final, hist_text, hist_melted = hist_melted)
+      hist_all <- do.call('rbind', hist_lab)
+      p_history <- ggplot(hist_all) +
         geom_line(aes(x = iteration, y = value, color = variable),
-                  alpha = 0.7, size = 1.2) +
+                  alpha = 0.5, size = 1.2) +
+        geom_text(aes(label = variable, x = lab_x, colour = variable,
+                      y = lab_y, hjust = "inward"),
+                  alpha = 1, check_overlap = TRUE, size = 3) +
+        guides(color = FALSE) +
         ggtitle("Training History of Models on Valid") +
         ylab("RMSE") +
         xlab("Iterations")
-        #guides(color = FALSE)
       # make the hitograms
       y = mlout@y
       all_target <- as.data.frame(df1[,y])[,1]
@@ -77,7 +99,6 @@ start.qplot <- function(mlout) {
                    aes(xintercept=wavg, color = "blue")) +
         geom_density(aes(value, color = "black"), alpha = 0.8) +
         facet_wrap(~variable) +
-        #scale_x_continuous(limits = c(0, 0.5)) +
         scale_color_manual(name = '', values = c("blue" = "blue",
                                                  "red" = "red",
                                                  "black" = "black"),
