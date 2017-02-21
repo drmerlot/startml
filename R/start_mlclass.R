@@ -1,10 +1,10 @@
 # trying to set a class
 setClass("mlblob", slots = c(models = "list",
-                         labeldata = "H2OFrame",
+                         labeled_data = "list",
                          train = "list",
                          valid = "list",
                          test = "list",
-                         newdata = "list",
+                         new_data = "list",
                          predict_train = "list",
                          predict_valid = "list",
                          predict_test = "list",
