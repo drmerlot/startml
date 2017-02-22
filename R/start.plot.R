@@ -101,13 +101,13 @@ start.qplot <- function(mlout) { suppressWarnings(
         geom_vline(data = ddply(target_melted , "variable", summarize,
                                 wavg = median(na.omit(value))),
                    aes(xintercept=wavg, color = "orange")) +
-        geom_density(aes(value, color = "black"), alpha = 0.8) +
+        geom_density(aes(value, color = "blue"), alpha = 0.8) +
         facet_wrap(~variable) +
         scale_color_manual(name = '', values = c("green" = "green",
                                                  "orange" = "orange",
-                                                 "black" = "black"),
-                           labels = c("Kernel", 'Median','Mean')) +
-        xlab("Target Value") +
+                                                 "blue" = "blue"),
+                           labels = c("Kernel", 'Mean','Median')) +
+        xlab(y) +
         ylab("Density") +
         ggtitle(paste(y, "in Labeled Data Splits")) +
         theme(axis.text.x=element_text(angle = -45, hjust = 0))
@@ -119,17 +119,19 @@ start.qplot <- function(mlout) { suppressWarnings(
       xy_df$labeled <- mlout@test[[1]][,y]
       xy_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
       p_xy <- ggplot(xy_melted) +
-        geom_point(aes(x = labeled, y = value, color = variable)) +
-        geom_point(aes(x = labeled, y = labeled), color = "black", alpha = 0.2) +
+        geom_point(aes(x = labeled, y = value, color = variable), alpha = 0.5) +
+        geom_point(aes(x = labeled, y = labeled), color = "black", alpha = 0.5) +
         guides(color = FALSE) +
-        xlab("Labeled") +
-        ylab("Predicted") +
+        xlab(paste("Labeled",  y)) +
+        ylab(paste("Predicted", y)) +
         ggtitle("Labels vs Predictions on Test")
       # the order plot ======================
-      predictions_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
-      p_order <- ggplot(predictions_melted[order(predictions_melted$labeled),]) +
-        geom_point(aes(x = seq(1, nrow(predictions_melted)), y = value, color = variable), alpha = 0.3) +
-        geom_point(aes(x = seq(1, nrow(predictions_melted)), y = labeled), color = 'black', alpha = 0.5) +
+      pred_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
+      p_order <- ggplot(pred_melted[order(pred_melted$labeled),]) +
+        geom_point(aes(x = seq(1, nrow(pred_melted)), y = value,
+                       color = variable), alpha = 0.6) +
+        geom_point(aes(x = seq(1, nrow(pred_melted)), y = labeled),
+                   size = .8) +
         scale_color_discrete(guide=FALSE) +
         ylab(y) +
         xlab(paste("Index: Ordered By Asending", y)) +
