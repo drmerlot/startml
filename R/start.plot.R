@@ -33,9 +33,6 @@ hist_text <- function(id_final, hist_melted) {
   sub
 }
 
-rename_predictions <- function(prediction) {
-  names(prediction) <-
-  }
 
 # =======================================
 
