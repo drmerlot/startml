@@ -68,7 +68,7 @@ start.ml <- function(labeled_data, new_data,
   } else {
     cat("\nChoosing Models on Test based on Performance and Correlation Thresholds\n")
     selected_models <- start.selectmodels(model_list = all_models,
-                                          test = test, #!!! needs to be 'test' from split not new data
+                                          test = test,
                                           eval_metric = eval_metric,
                                           eval_threshold = eval_threshold,
                                           y_name = y_name,
@@ -91,7 +91,7 @@ start.ml <- function(labeled_data, new_data,
                        test_id = rep(1, length(selected_models))
     )
 
-    # build the output object of new class mlstack
+    # build the output object of new class mlblob
     mlout <- new("mlblob",
                  models = selected_models,
                  labeled_data = list(labeled_data),
