@@ -33,15 +33,21 @@ start.selectmodels <- function(model_list,
   }
   if(length(low_cor_models) == 0){
     min_message <- min(correlations[correlations != 0])
-    stop(paste("No models selected, minimum correlation available is", min_message))
+    warning(paste("No models selected, minimum correlation available is",
+                  min_message, "\nReturning models unconstrained by correlation\n"))
+    low_cor_models <- model_list
   } else {
     if(is.null(eval_threshold)) {
       low_cor_models
     } else {
+      if(!exists("prediction_list")) {
+        prediction_list <- start.predict(test, model_list)
+      }
       metrics <- unlist(start.testmetric(prediction_list, test = test, y_name = y_name, eval_metric = eval_metric))
       keep_models <- low_cor_models[eval_fun(metrics, eval_threshold)]
       if(length(keep_models) == 0){
-        stop(paste("No models selected, choose different eval_threshold"))
+        warning("eval_threshold too optimistic, returning models unconstrained by performance")
+        low_cor_models
       } else {
         keep_models
       }
