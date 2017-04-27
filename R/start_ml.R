@@ -27,7 +27,6 @@ start.ml <- function(labeled_data, new_data,
   # This needs to be replaced ==========================================
   # only works with shared holdout.
   # need condition for other holdout.
-  # fix by creating an ml object class that deals with this.
   if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
     splits <- h2o.splitFrame(labeled_data,
                              c((1 - ((percent_valid_holdout/100) + (percent_test_holdout/100))), (percent_test_holdout/100)), seed = split_seed)
