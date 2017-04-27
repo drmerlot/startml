@@ -36,19 +36,17 @@ start.dlgrid<- function(train,
 
   # define the target and predictors
   y <- y_name
-  x <- setdiff(names(df1), y)
+  x <- setdiff(names(train), y)
 
 # set variable type for proper auto options
 if(y_type == "discrete") {
   train[,y] <- as.factor(train[,y])
   valid[,y] <- as.factor(valid[,y])
   test[,y] <- as.factor(test[,y])
-  df1[,y] <- as.factor(df1[,y])
 } else {
   train[,y] <- as.numeric(train[,y])
   valid[,y] <- as.numeric(valid[,y])
   test[,y] <- as.numeric(test[,y])
-  df1[,y] <- as.numeric(df1[,y])
 }
 
 dl_parameter_search <- list(
