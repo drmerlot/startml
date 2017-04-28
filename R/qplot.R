@@ -42,7 +42,7 @@ even_lengths <- function(train_rmse) {
   train_hist
 }
 
-start.qplot <- function(mlout) { suppressWarnings(
+qplot <- function(mlout) { suppressWarnings(
   if(class(mlout)[1] == "mlblob") {
     if(class(mlout@models[[1]]) == "H2OBinomialModel") {
       stop("Does not yet support binomial model summary")
