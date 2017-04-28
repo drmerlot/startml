@@ -1,47 +1,6 @@
-# Plot binomial models ==========================
-# right now, uses model list,
-# change this to ml object when object is defined
+# Plot regression models ==========================
 # this adds ggplot2 dependency making the future package
 #   need gpl3 license.
-
-# temporary place for extra functions ==================
-get_hist <- function(x) {
-  x@model$scoring_history$validation_rmse
-}
-
-get_ids <- function(x) {
-  x@model$id
-}
-
-
-paste_nas <- function(x, longest) {
-  x_na <- c(x, rep(NA, longest - length(x)))
-  x_na
-}
-
-# finding the x y for text labels in traning histories
-hist_text <- function(id_final, hist_melted) {
-  sub <- hist_melted[hist_melted$variable %in% id_final,]
-  lab_x <- max(sub$iteration)
-  lab_y <- sub$value[which(sub$iteration == lab_x)]
-  col_x <- rep(lab_x, nrow(sub))
-  col_y <- rep(lab_y, nrow(sub))
-  sub$lab_x <- col_x
-  sub$lab_y <- col_y
-  sub$lab_x[which(sub$iteration != lab_x)] <- NA
-  sub$lab_y[which(sub$iteration != lab_x)] <- NA
-  sub
-}
-
-
-# =======================================
-
-even_lengths <- function(train_rmse) {
-  max_length <- max(unlist(lapply(train_rmse, length)))
-  train_hist <- lapply(train_rmse, paste_nas, longest = max_length)
-  train_hist
-}
-
 qplot <- function(mlout) { suppressWarnings(
   if(class(mlout)[1] == "mlblob") {
     if(class(mlout@models[[1]]) == "H2OBinomialModel") {
