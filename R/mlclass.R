@@ -1,17 +1,17 @@
 # trying to set a class
 setClass("mlblob", slots = c(models = "list",
-                         labeled_data = "list",
-                         train = "list",
-                         valid = "list",
-                         test = "list",
-                         new_data = "list",
-                         predict_train = "list",
-                         predict_valid = "list",
-                         predict_test = "list",
-                         predict_newdata = "list",
-                         index = "data.frame",
-                         y = "character",
-                         x = "character"))
+                             labeled_data = "list",
+                             train = "list",
+                             valid = "list",
+                             test = "list",
+                             new_data = "list",
+                             predict_train = "list",
+                             predict_valid = "list",
+                             predict_test = "list",
+                             predict_newdata = "list",
+                             index = "data.frame",
+                             y = "character",
+                             x = "character"))
 
 
 # doesn't work  ==============================

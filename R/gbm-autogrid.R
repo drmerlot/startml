@@ -1,21 +1,18 @@
 #==================================================================
 ### Train gbm models
 gbm_autogrid <- function(train,
-                          valid,
-                          y,
-                          x,
-                          eval_metric = "AUTO",
-                          validation_type = "SharedHoldout",
-                          wd = getwd(),
-                          percent_valid_holdout = 10,
-                          percent_test_holdout = 10,
-                          folds = NULL,
-                          gbm_min_depth = 1,
-                          gbm_max_depth = 7,
-                          gbm_runtime_secs = 10,
-                          gbm_stopping_rounds = 10,
-                          gbm_stopping_tolerance = 1e-5,
-                          grid_strategy = "RandomDiscrete") {
+                         valid,
+                         y,
+                         x,
+                         eval_metric = "AUTO",
+                         wd = getwd(),
+                         folds = NULL,
+                         gbm_min_depth = 1,
+                         gbm_max_depth = 7,
+                         gbm_runtime_secs = 10,
+                         gbm_stopping_rounds = 10,
+                         gbm_stopping_tolerance = 1e-5,
+                         grid_strategy = "RandomDiscrete") {
   
   cat("Training Gradient Boosting Models\n")
   #============================================================
@@ -48,15 +45,15 @@ gbm_autogrid <- function(train,
   # needs be removed first for iterating within same session
   h2o.rm("gbm")
   gbm_random_grid <- h2o.grid(algorithm = "gbm",
-                             grid_id = "gbm", # this causes failure on repreat runs, but automatic names give huge model ids
-                             x = x,
-                             y = y,
-                            training_frame = train,
-                            validation_frame = valid,
-                            ntrees = 4000,
-                            hyper_params = gbm_parameter_search,
-                            search_criteria = gbm_search_criteria,
-                            seed = 1234)
+                              grid_id = "gbm", # this causes failure on repreat runs, but automatic names give huge model ids
+                              x = x,
+                              y = y,
+                              training_frame = train,
+                              validation_frame = valid,
+                              ntrees = 4000, # has to be adjustable 
+                              hyper_params = gbm_parameter_search,
+                              search_criteria = gbm_search_criteria,
+                              seed = 1234)
   #====================================
   #gbm_grid <- h2o.getGrid("gbm") # already returns grid
 

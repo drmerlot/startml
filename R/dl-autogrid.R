@@ -1,20 +1,17 @@
 #===============================================================================
 # Train Deep learning models
 dl_autogrid <- function(train,
-                         valid,
-                         y,
-                         x,
-                         eval_metric = "AUTO",
-                         wd = getwd(),
-                         validation_type = "SharedHoldout",
-                         percent_valid_holdout = 10,
-                         percent_test_holdout = 10,
-                         folds = NULL,
-                         deeplearning_runtime_secs = 3600,
-                         deeplearning_stopping_rounds = 10,
-                         deeplearning_stopping_tolerance = 1e-5,
-                         deeplearning_adaptive_rate = TRUE,
-                         grid_strategy = "RandomDiscrete") {
+                        valid,
+                        y,
+                        x,
+                        eval_metric = "AUTO",
+                        wd = getwd(),
+                        folds = NULL,
+                        deeplearning_runtime_secs = 10,
+                        deeplearning_stopping_rounds = 10,
+                        deeplearning_stopping_tolerance = 1e-5,
+                        deeplearning_adaptive_rate = TRUE,
+                        grid_strategy = "RandomDiscrete") {
 
   cat("Training Deep Learning Models\n")
   #==============================================

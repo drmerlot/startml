@@ -1,11 +1,11 @@
 #===========================================================
 # get best models by performance and correlation threshold for ensemble
 select_models <- function(model_list,
-                               test,
-                               eval_metric,
-                               y,
-                               eval_threshold = NULL,
-                               correlation_threshold = NULL) {
+                          test,
+                          eval_metric,
+                          y,
+                          eval_threshold = NULL,
+                          correlation_threshold = NULL) {
   if(eval_metric == "AUC") {
     eval_fun <- function(a, b) {
       a >= b

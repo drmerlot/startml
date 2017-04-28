@@ -14,7 +14,7 @@ startml <-  function(labeled_data,
                       split_seed = NULL,
                       number_top_models = NULL,
                       eval_threshold = NULL,
-                      correlation_threshold = 1,
+                      correlation_threshold = 0,
                       return_dataframe = FALSE) {
   
   if(validation_type == "SharedHoldout" && is.null(split_seed)) {
@@ -66,18 +66,18 @@ startml <-  function(labeled_data,
   if(!is.null(number_top_models)) {
     cat("\nChoosing Top Performing Models on Validation")
     sorted_models <- sort_models(all_models,
-                                      eval_metric = eval_metric)
+                                 eval_metric = eval_metric)
     selected_models <- top_models(sorted_models,
-                                       all_models,
-                                       number_top_models = number_top_models)
+                                  all_models,
+                                  number_top_models = number_top_models)
   } else {
     cat("\nChoosing Models on Test based on Performance and Correlation Thresholds\n")
     selected_models <- select_models(model_list = all_models,
-                                          test = test,
-                                          eval_metric = eval_metric,
-                                          eval_threshold = eval_threshold,
-                                          y = y,
-                                          correlation_threshold = correlation_threshold)
+                                     test = test,
+                                     eval_metric = eval_metric,
+                                     eval_threshold = eval_threshold,
+                                     y = y,
+                                     correlation_threshold = correlation_threshold)
   }
     cat("\nSaving Train Predictions with Selected Models\n")
     train_predictions <- predict_blob(test = train, selected_models)
