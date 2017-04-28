@@ -1,6 +1,6 @@
 #========================================================
 ### function to run all three ...
-start.autotrain <- function(train,
+autotrain <- function(train,
                             valid, 
                             y,
                             x,
@@ -13,7 +13,7 @@ start.autotrain <- function(train,
   model_paths <- NULL
 
   if(sum(as.numeric(algorithms %in% "deeplearning")) == 1) {
-    start.dlgrid(train = train,
+    dl_autogrid(train = train,
                  valid = valid,
                  y = y,
                  x = x, 
@@ -22,7 +22,7 @@ start.autotrain <- function(train,
     model_paths <- c(model_paths, paste(wd, "/dl_models", sep = ""))
   }
   if(sum(as.numeric(algorithms %in% "randomForest")) == 1) {
-    start.rfgrid(train = train,
+    rf_autogrid(train = train,
                  valid = valid,
                  y = y,
                  x = x, 
@@ -31,7 +31,7 @@ start.autotrain <- function(train,
     model_paths <- c(model_paths, paste(wd, "/rf_models", sep = ""))
   }
   if(sum(as.numeric(algorithms %in% "gbm")) == 1) {
-    start.gbmgrid(train = train,
+    gbm_autogrid(train = train,
                   valid = valid,
                   y = y,
                   x = x, 
@@ -44,6 +44,6 @@ start.autotrain <- function(train,
     stop("Set algorithms to one or a combination of 'deeplearning', 'randomForest', 'gbm'")
   }
 
-  all_models <- start.loadmodels(model_paths)
+  all_models <- load_models(model_paths)
   all_models
 }

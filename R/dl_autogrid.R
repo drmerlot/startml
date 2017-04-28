@@ -1,6 +1,6 @@
 #===============================================================================
 # Train Deep learning models
-start.dlgrid <- function(train,
+dl_autogrid <- function(train,
                          valid,
                          y,
                          x,
