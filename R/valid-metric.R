@@ -1,6 +1,6 @@
 #===============================================
 # get validation metrics from models
-start.validmetric <- function(model_list, eval_metric) {
+valid_metric <- function(model_list, eval_metric) {
   if(eval_metric == "logloss") {
     metric <- lapply(model_list, h2o.logloss, valid = TRUE)
   } else if(eval_metric == "MSE") {

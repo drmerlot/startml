@@ -1,6 +1,6 @@
 #===================================================================
 # more controls needed
-start.ml <-  function(labeled_data, 
+startml <-  function(labeled_data, 
                       new_data,
                       y, 
                       x = NULL,
@@ -54,7 +54,7 @@ start.ml <-  function(labeled_data,
     test[,y] <- as.numeric(test[,y])
   }
   
-  all_models <- start.autotrain(train = train,
+  all_models <- autotrain(train = train,
                                 valid = valid, 
                                 y = y,
                                 x = x, 
@@ -65,14 +65,14 @@ start.ml <-  function(labeled_data,
 
   if(!is.null(number_top_models)) {
     cat("\nChoosing Top Performing Models on Validation")
-    sorted_models <- start.sortmodels(all_models,
+    sorted_models <- sort_models(all_models,
                                       eval_metric = eval_metric)
-    selected_models <- start.topmodels(sorted_models,
+    selected_models <- top_models(sorted_models,
                                        all_models,
                                        number_top_models = number_top_models)
   } else {
     cat("\nChoosing Models on Test based on Performance and Correlation Thresholds\n")
-    selected_models <- start.selectmodels(model_list = all_models,
+    selected_models <- select_models(model_list = all_models,
                                           test = test,
                                           eval_metric = eval_metric,
                                           eval_threshold = eval_threshold,
@@ -80,13 +80,13 @@ start.ml <-  function(labeled_data,
                                           correlation_threshold = correlation_threshold)
   }
     cat("\nSaving Train Predictions with Selected Models\n")
-    train_predictions <- start.predict(test = train, selected_models)
+    train_predictions <- predict_blob(test = train, selected_models)
     cat("\nSaving Valid Predictions with Selected Models\n")
-    valid_predictions <- start.predict(test = valid, selected_models)
+    valid_predictions <- predict_blob(test = valid, selected_models)
     cat("\nSaving Test Predictions with Selected Models\n")
-    test_predictions <- start.predict(test = test, selected_models)
+    test_predictions <- predict_blob(test = test, selected_models)
     cat("\nPredicting on New Data with Selected Models\n")
-    newdata_predictions <- start.predict(test = new_data, selected_models)
+    newdata_predictions <- predict_blob(test = new_data, selected_models)
   
   if(return_dataframe == FALSE) {
     # needs work.
@@ -114,6 +114,6 @@ start.ml <-  function(labeled_data,
     # =================================================
     mlout
   } else {
-    stop("start.ml does not currently support auto conversion to standard r object")
+    stop("startml does not currently support auto conversion to standard r object")
   }
 }
