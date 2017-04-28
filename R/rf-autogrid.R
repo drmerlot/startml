@@ -1,21 +1,21 @@
 #==================================================================
 ## Train rf models
-start.rfgrid <- function(train,
-                         valid,
-                         y,
-                         x, 
-                         eval_metric = "AUTO",
-                         wd = getwd(),
-                         validation_type = "SharedHoldout", #need to add the others
-                         percent_valid_holdout = 20,
-                         percent_test_holdout = 20,
-                         folds = NULL,
-                         rf_min_depth = 1,
-                         rf_max_depth = 7,
-                         rf_runtime_secs = 20,
-                         rf_stopping_rounds = 10,
-                         rf_stopping_tolerance = 1e-5,
-                         grid_strategy = "RandomDiscrete") {
+rf_autogrid <- function(train,
+                        valid,
+                        y,
+                        x, 
+                        eval_metric = "AUTO",
+                        wd = getwd(),
+                        validation_type = "SharedHoldout", #need to add the others
+                        percent_valid_holdout = 20,
+                        percent_test_holdout = 20,
+                        folds = NULL,
+                        rf_min_depth = 1,
+                        rf_max_depth = 7,
+                        rf_runtime_secs = 20,
+                        rf_stopping_rounds = 10,
+                        rf_stopping_tolerance = 1e-5,
+                        grid_strategy = "RandomDiscrete") {
 
   cat("Training Random Forest Models\n")
 ### here for grid
