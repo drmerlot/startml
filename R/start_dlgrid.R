@@ -58,6 +58,8 @@ start.dlgrid <- function(train,
                             seed = 1234) # needs to be changable
                              
   # run the grid
+  # needs be removed first for iterating within same session
+  h2o.rm("dl")
   dl_random_grid <- h2o.grid(algorithm="deeplearning",
                              grid_id = "dl", # makes repeat run impossible
                              training_frame=train,

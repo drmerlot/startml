@@ -44,7 +44,9 @@ start.gbmgrid <- function(train,
     stopping_metric = eval_metric,
     seed = 1234 # needs to be changable 
   )
-
+  
+  # needs be removed first for iterating within same session
+  h2o.rm("gbm")
   gbm_random_grid <- h2o.grid(algorithm = "gbm",
                              grid_id = "gbm", # this causes failure on repreat runs, but automatic names give huge model ids
                              x = x,

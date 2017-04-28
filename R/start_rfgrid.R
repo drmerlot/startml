@@ -36,6 +36,8 @@ start.rfgrid <- function(train,
                             stopping_metric = eval_metric,
                             seed = 1234)
 
+  # needs be removed first for iterating within same session
+  h2o.rm("rf")
   rf_random_grid <- h2o.grid(hyper_params = rf_parameter_search,
                              search_criteria = rf_search_criteria,
                              algorithm = "randomForest",
