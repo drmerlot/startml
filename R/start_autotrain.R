@@ -1,42 +1,42 @@
 #========================================================
 ### function to run all three ...
 start.autotrain <- function(train,
-                            valid, 
-                            y,
-                            x,
-                            algorithms = c("deeplearning", "randomForest", "gbm"),
-                            eval_metric = "AUTO",
-                            validation_type = "SharedHoldout", # add RandomHoldout and cv
-                            runtime_secs = 10,
-                            wd = getwd()) {
+                    y_name,
+                    y_type,
+                    algorithms = c("deeplearning", "randomForest", "gbm"),
+                    eval_metric = "AUTO",
+                    validation_type = "SharedHoldout", # add RandomHoldout and cv
+                    runtime_secs = 10,
+                    split_seed = NULL,
+                    wd = getwd()) {
 
   model_paths <- NULL
 
   if(sum(as.numeric(algorithms %in% "deeplearning")) == 1) {
     start.dlgrid(train = train,
-                 valid = valid,
-                 y = y,
-                 x = x, 
+                 y_name = y_name,
+                 y_type = y_type,
                  eval_metric = eval_metric,
-                 deeplearning_runtime_secs = runtime_secs)
+                 deeplearning_runtime_secs = runtime_secs,
+                 split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/dl_models", sep = ""))
   }
   if(sum(as.numeric(algorithms %in% "randomForest")) == 1) {
     start.rfgrid(train = train,
-                 valid = valid,
-                 y = y,
-                 x = x, 
+                 y_name = y_name,
+                 y_type = y_type,
                  eval_metric = eval_metric,
-                 rf_runtime_secs = runtime_secs)
+                 rf_runtime_secs = runtime_secs,
+                 split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/rf_models", sep = ""))
   }
   if(sum(as.numeric(algorithms %in% "gbm")) == 1) {
     start.gbmgrid(train = train,
-                  valid = valid,
-                  y = y,
-                  x = x, 
+                  y_name = y_name,
+                  y_type = y_type,
                   eval_metric = eval_metric,
-                  gbm_runtime_secs = runtime_secs)
+                  gbm_runtime_secs = runtime_secs,
+                  split_seed = split_seed)
     model_paths <- c(model_paths, paste(wd, "/gbm_models", sep = ""))
   }
   if(sum(as.numeric(algorithms %in% "gbm") + as.numeric(algorithms %in% "randomForest") +
@@ -46,4 +46,5 @@ start.autotrain <- function(train,
 
   all_models <- start.loadmodels(model_paths)
   all_models
+
 }
