@@ -1,8 +1,9 @@
 #==================================================================
 ### Train gbm models
 start.gbmgrid <- function(train,
-                          y_name,
-                          y_type,
+                          valid,
+                          y,
+                          x,
                           eval_metric = "AUTO",
                           validation_type = "SharedHoldout",
                           wd = getwd(),
@@ -14,44 +15,11 @@ start.gbmgrid <- function(train,
                           gbm_runtime_secs = 10,
                           gbm_stopping_rounds = 10,
                           gbm_stopping_tolerance = 1e-5,
-                          grid_strategy = "RandomDiscrete",
-                          split_seed = NULL) {
-
+                          grid_strategy = "RandomDiscrete") {
+  
   cat("Training Gradient Boosting Models\n")
-  # break the data for holdout validation
-  if(is.null(split_seed)) {
-    split_seed <- round(runif(1, -1000000000, 1000000000))
-  }
-
-  if(validation_type == "SharedHoldout" | validation_type == "RandomHoldout") {
-    splits <- h2o.splitFrame(train,
-      c((1 - ((percent_valid_holdout/100) + (percent_test_holdout/100))), (percent_test_holdout/100)), seed = split_seed)
-    train  <- h2o.assign(splits[[1]], "train.hex")
-    valid  <- h2o.assign(splits[[2]], "valid.hex")
-    test  <- h2o.assign(splits[[3]], "test.hex")
-  } else {
-    splits <- h2o.splitFrame(train, 1 - (percent_test_holdout/100), seed = split_seed)
-    train  <- h2o.assign(splits[[1]], "train.hex")
-    test  <- h2o.assign(splits[[2]], "test.hex")
-  }
-
-  # define the target and predictors
-  y <- y_name
-  x <- setdiff(names(df1), y)
-
-  # set variable type for proper auto options
-  if(y_type == "discrete") {
-    train[,y] <- as.factor(train[,y])
-    valid[,y] <- as.factor(valid[,y])
-    test[,y] <- as.factor(test[,y])
-    df1[,y] <- as.factor(df1[,y])
-  } else {
-    train[,y] <- as.numeric(train[,y])
-    valid[,y] <- as.numeric(valid[,y])
-    test[,y] <- as.numeric(test[,y])
-    df1[,y] <- as.numeric(df1[,y])
-  }
-  # needs to be reviewed for smart values ...
+  #============================================================
+  # needs to be reviewed for smart values and changable...
   # score_tree_interval = c(2, 5, 10),
   gbm_parameter_search = list(
     max_depth = seq(gbm_min_depth, gbm_max_depth, 1),
@@ -74,33 +42,27 @@ start.gbmgrid <- function(train,
     stopping_rounds =  gbm_stopping_rounds,
     stopping_tolerance = gbm_stopping_tolerance,
     stopping_metric = eval_metric,
-    seed = 1234
+    seed = 1234 # needs to be changable 
   )
 
-  gbm_random_grid <- h2o.grid(
-    algorithm = "gbm",
-    grid_id = "gbm",
-    x = x,
-    y = y,
-    training_frame = train,
-    validation_frame = valid,
-    ntrees = 4000,
-    hyper_params = gbm_parameter_search,
-    search_criteria = gbm_search_criteria,
-    seed = 1234
-  )
-
-
-  gbm_grid <- h2o.getGrid("gbm")
-
+  gbm_random_grid <- h2o.grid(algorithm = "gbm",
+                             grid_id = "gbm", # this causes failure on repreat runs, but automatic names give huge model ids
+                             x = x,
+                             y = y,
+                            training_frame = train,
+                            validation_frame = valid,
+                            ntrees = 4000,
+                            hyper_params = gbm_parameter_search,
+                            search_criteria = gbm_search_criteria,
+                            seed = 1234)
+  #====================================
+  #gbm_grid <- h2o.getGrid("gbm") # already returns grid
 
   # write out the models to disk
   gbm_path <- paste(wd, "/gbm_models", sep = "")
-  gbm_model_files <- sapply(gbm_grid@model_ids, function(m) h2o.saveModel(h2o.getModel(m), path = gbm_path, force = TRUE))
+  gbm_model_files <- sapply(gbm_random_grid@model_ids, function(m) h2o.saveModel(h2o.getModel(m), path = gbm_path, force = TRUE))
 
-  # print out, needs work
+  # print out
   cat(paste("gbm Models Saved To:\n", gbm_path, "\n\n"))
-  gbm_grid
-
-
+  gbm_random_grid
 }
