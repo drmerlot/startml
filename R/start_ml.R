@@ -13,8 +13,8 @@ start.ml <-  function(labeled_data,
                       runtime_secs = 10,
                       split_seed = NULL,
                       number_top_models = NULL,
-                      eval_threshold = 0.7,
-                      correlation_threshold = 0.6,
+                      eval_threshold = NULL,
+                      correlation_threshold = 1,
                       return_dataframe = FALSE) {
   
   if(validation_type == "SharedHoldout" && is.null(split_seed)) {
@@ -76,7 +76,7 @@ start.ml <-  function(labeled_data,
                                           test = test,
                                           eval_metric = eval_metric,
                                           eval_threshold = eval_threshold,
-                                          y_name = y_name,
+                                          y = y,
                                           correlation_threshold = correlation_threshold)
   }
     cat("\nSaving Train Predictions with Selected Models\n")

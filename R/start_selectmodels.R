@@ -3,7 +3,7 @@
 start.selectmodels <- function(model_list,
                                test,
                                eval_metric,
-                               y_name,
+                               y,
                                eval_threshold = NULL,
                                correlation_threshold = NULL) {
   if(eval_metric == "AUC") {
@@ -43,7 +43,7 @@ start.selectmodels <- function(model_list,
       if(!exists("prediction_list")) {
         prediction_list <- start.predict(test, model_list)
       }
-      metrics <- unlist(start.testmetric(prediction_list, test = test, y_name = y_name, eval_metric = eval_metric))
+      metrics <- unlist(start.testmetric(prediction_list, test = test, y = y, eval_metric = eval_metric))
       keep_models <- low_cor_models[eval_fun(metrics, eval_threshold)]
       if(length(keep_models) == 0){
         warning("eval_threshold too optimistic, returning models unconstrained by performance")

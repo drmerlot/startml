@@ -1,13 +1,13 @@
 #===============================================
 # get test holdout metrics from models # depends on Metrics package for now
-start.testmetric <- function(prediction_list, test, eval_metric, y_name) {
+start.testmetric <- function(prediction_list, test, eval_metric, y) {
   predictions_dataframe <- lapply(prediction_list, as.data.frame)
   if(eval_metric == "AUC" | eval_metric == "logloss") {
     predictions <- lapply(predictions_dataframe, function(x)x[,3])
   } else {
     predictions <- lapply(predictions_dataframe, function(x)x[,1])
   }
-  actual <- as.data.frame(test[,y_name])[,1]
+  actual <- as.data.frame(test[,y])[,1]
   if(eval_metric == "logloss") {
     metric <- lapply(predictions, FUN = logLoss, actual = actual)
   } else if(eval_metric == "MSE") {
