@@ -1,6 +1,6 @@
 #==================================================================
 ### Train gbm models
-start.gbmgrid <- function(train,
+gbm_autogrid <- function(train,
                           valid,
                           y,
                           x,
