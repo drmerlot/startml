@@ -11,7 +11,8 @@ setClass("mlblob", slots = c(models = "list",
                              predict_newdata = "list",
                              index = "data.frame",
                              y = "character",
-                             x = "character"))
+                             x = "character", 
+                             output = "data.frame"))
 
 
 # doesn't work  ==============================
