@@ -46,8 +46,12 @@ startml <-  function(labeled_data,
     x <- setdiff(names(labeled_data), y)
   }
   
-  if(!is.null(label_id)) { 
-    x <- x[-which(x == label_id)]  
+  if(!is.null(label_id)) {
+    if(sum(x %in% label_id) > 0) {
+      x <- x[-which(x == label_id)]  
+    } else { 
+      x <- x
+      }
   }
 
   # set variable type for proper auto options
