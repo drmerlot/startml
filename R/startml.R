@@ -125,7 +125,7 @@ startml <-  function(labeled_data,
                    x = x, 
                    output = data.frame(mlblob.output = "No R object Returned, set return_dataframe to TRUE"))
     } else {
-      stop("Returning R object in currently in the works")
+      warning("Returning R object in currently in the works")
     }
     mlout
 }
