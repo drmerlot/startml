@@ -1,7 +1,7 @@
 # Plot regression models ==========================
 # this adds ggplot2 dependency making the future package
 #   need gpl3 license.
-qplot <- function(mlout) { suppressWarnings(
+plot <- function(mlout) { suppressWarnings(
   if(class(mlout)[1] == "mlblob") {
     if(class(mlout@models[[1]]) == "H2OBinomialModel") {
       stop("Does not yet support binomial model summary")
@@ -96,7 +96,7 @@ qplot <- function(mlout) { suppressWarnings(
       grid.arrange(p_history, p_order, p_target, p_xy, ncol = 2, nrow = 2)
     }
   } else {
-    ggpot2::qplot(mlout)
+    plot(mlout)
   }
 )}
 
