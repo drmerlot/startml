@@ -26,7 +26,7 @@ select_models <- function(model_list,
     predictions <- h2o.cbind(prediction_list)
     }
   correlations <- h2o.cor(predictions)
-  colnames(correlations) <- seq(1:length(model_list))
+  names(correlations) <- seq(1:length(model_list))
   correlations[!lower.tri(correlations)] <- 0
   low_cor_models <- model_list[as.numeric(colnames(correlations[,!apply(correlations,2,
     function(x) any(x > correlation_threshold))]))]

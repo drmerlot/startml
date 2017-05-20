@@ -1,7 +1,7 @@
 #===================================================================
 # more controls needed
 startml <-  function(labeled_data, 
-                      new_data,
+                      newdata,
                       y, 
                       x = NULL,
                       label_id = NULL, 
