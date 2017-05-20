@@ -6,7 +6,8 @@ plot_dlayer <- function(model,
                         label, 
                         dimentions = 2, 
                         max_points = 1000,
-                        tsne_iter = 1000) {
+                        tsne_iter = 1000, 
+                        wd = getwd()) {
   samp <- sample(x = 1:nrow(vis_data), size = max_points)
   samp <- samp[order(samp)]
   view_label <- vis_data[samp, label]
@@ -31,6 +32,7 @@ plot_dlayer <- function(model,
       ggtitle("tSNE Dimentions of DL model Hidden Layer") + 
       guides(color = guide_legend(title = label)) +
       theme_classic(base_size =  12)
+    p
   } else if(dimentions == 3) {
     cat("Starting tSNE dimentionality reduction")
     dat_tsne <- tsne(X = dlayer, 
@@ -46,8 +48,10 @@ plot_dlayer <- function(model,
       layout(scene = list(xaxis = list(title = "tSNE Dim 1"),
                           yaxis = list(title = "tSNE Dim 2"),
                           zaxis = list(title = "tSNE Dim 3")))
+  cat(paste("3D plot is saved as html page:\n", wd, "/", "dl-hidden-layer-plot.html\n", 
+            "open it there with your browser", sep = ""))
+  htmlwidgets::saveWidget(as_widget(p), "dl-hidden-layer-plot.html")
   } else { 
     stop("Dimentions must be set to 2 or 3")  
   }
-  p
 }
