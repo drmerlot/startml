@@ -27,8 +27,8 @@ plot_dlayer <- function(model,
     p <- ggplot(dat_plot) + 
       geom_point(aes(x = dl.hl.1, y = dl.hl.2, color = vis_label),
                  alpha = 0.7) +
-      xlab("DL Hidden Layer Low Dim 1") +
-      ylab("DL Hidden Layer Low Dim 2") + 
+      xlab("tSNE Dim 1") +
+      ylab("tSNE Dim 2") + 
       ggtitle("tSNE Dimentions of DL model Hidden Layer") + 
       guides(color = guide_legend(title = label)) +
       theme_classic(base_size =  12)
