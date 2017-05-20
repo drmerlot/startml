@@ -12,7 +12,9 @@ plot_dlayer <- function(model,
   view_label <- vis_data[samp, label]
   names(view_label) <- label
   dat <- vis_data[samp,]
+  cat("Getting hidden layer values from DL model\n")
   dlayer <- as.data.frame(h2o.deepfeatures(model, dat, layer = layer))
+  cat("Starting tSNE dimentionality reduction")
   dat_tsne <- tsne(X = dlayer, 
                    k = dimentions, 
                    initial_dims = dim(dlayer)[2], 
@@ -22,12 +24,13 @@ plot_dlayer <- function(model,
   if(dimentions == 2) {
     names(dat_plot) <- c("dl.hl.1", "dl.hl.2")
     p <- ggplot(dat_plot) + 
-      geom_point(aes(x = dl.hl.1, y = dl.hl.2, color = vis_label)) +
+      geom_point(aes(x = dl.hl.1, y = dl.hl.2, color = vis_label),
+                 alpha = 0.7) +
       xlab("DL Hidden Layer Low Dim 1") +
       ylab("DL Hidden Layer Low Dim 2") + 
       ggtitle("tSNE Dimentions of DL model Hidden Layer") + 
       guides(color = guide_legend(title = label)) +
-      theme_dark(base_size =  12)
+      theme_classic(base_size =  12)
   } else if(dimentions == 3) {
     stop("3D plot in the works. Requires Plotly")
   } else { 
