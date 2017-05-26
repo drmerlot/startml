@@ -5,9 +5,8 @@ Why startml? Anyone who really wants to build machine learning models and apply 
 
 What startml does is speed up the learning-through-doing process for new comers.
 
-How this happens is by providing tools for automatically building many models, helping you put some miles on your CPU doing machine learning, and hopefully, giving you a little boost to some early success, inspiring more effort towards building a valuable knowledge and skill set. If you feel any connection to the figure below, try installing startml.
+How this happens is by providing tools for automatically building many models, helping you put some miles on your CPU doing machine learning, and hopefully, giving you a little boost to some early success, inspiring more effort towards building a valuable knowledge and skill set. 
 
-Its for you if: You are excited to learn new things, focused on the fastest path to creating value, 
-and probably a little impatient. 
+It migh be for you if: You want to do machine learning, you are excited to learn new things, you are focused on the fastest path to creating value, and you are (a little) impatient. 
 
 
