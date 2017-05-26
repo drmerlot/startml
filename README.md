@@ -7,6 +7,8 @@ What startml does is speed up the learning-through-doing process for new comers.
 
 How this happens is by providing tools for automatically building many models, helping you put some miles on your CPU doing machine learning, and hopefully, giving you a little boost to some early success, inspiring more effort towards building a valuable knowledge and skill set. 
 
-It migh be for you if: You want to do machine learning, you are excited to learn new things, you are focused on the fastest path to creating value, and you are (a little) impatient. 
+It might be for you if: You want to do machine learning, you are excited to learn new things, you are focused on the fastest path to creating value, and you are (a little) impatient. 
+
+*startml is currently in the process of becoming an R package
 
 
