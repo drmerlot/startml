@@ -14,9 +14,13 @@ startml is an R package currently hosted here on github.
 You can install it with devtools from this repository
 
 If you don't have devtools, then in an R instance or Rstudio:
+
 install.packages(devtools)
+
 library(devtools) 
 
 Then install startml: 
+
 install_github("andrewsommerlot/startml")
+
 library(startml)
