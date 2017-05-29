@@ -28,6 +28,20 @@
 #' @param correlation_threshold Numeric object defining the maximum person correlation allowed in the group of resulting models. If two models show high correlation, the one with surperior performance will be kept and the other dropped. Value ranges from -1 to 1, default is NULL, returning models without correlation considered.
 #' @param return_dataframe Boolean, if TRUE startml will attempt to return a data.frame of the resulting predictions for each new data row. This will only work if the resulting predictions from new data are small enough to be stored in the R workspace. Though, when working with smaller datasets, such as some competitions, this can be very convient. The same object is stored in the H2O space and can be accessed with the name set as the ouput of startml and manipulated with functions from the h2o R package. Default is FALSE.
 #' @return Object of class mlblob using S4 type. mlblob objects contain all selected models, their predictions on train, validation, test, and new data, and can be plotted using plot() showing a summary of the model group.
+#' Slots are:
+#' models, a list of h2o model objects
+#' labeled_data an h2o frame object equivalent to the input label_data input object.
+# 'train = A list of h2o frame objects contianing the train component for each model from the labeled data split.
+# 'valid = A list of h2o frame objects contianing the validation component for each model from the labeled data split if cross validation is not used.
+# 'test = A list of h2o frame objects contianing the test component for each model from the labeled data split.
+# 'new_data = an h2o frame object equivalent to the input new_data input object.
+# 'predict_train = A list of h2o frame objects contianing all model predictions on the trainng data.
+# 'predict_valid = A list of h2o frame objects contianing all model predictions on the validation data.
+# 'predict_test = A list of h2o frame objects contianing all model predictions on the test data.
+# 'predict_newdata = A list of h2o frame objects contianing all model predictions on the new, unlabeled data.
+# 'index = A data.frame object containing summary information of the mlblob object.
+# 'y = A character object containing the name of the target variable column in labeled data.
+# 'x = A character object containing the names of all input varialbes to be used in model building. Both labeled data and new data must each contain all of the column names specificed in x. Default is NULL and uses all variables except y and any column name specified in label_id. Do not train models with an ID column as an input. Either remove it, or specifiy it in label_id.
 #' @export
 startml <-  function(labeled_data,
                       newdata,
