@@ -84,16 +84,29 @@ startml <-  function(labeled_data,
       }
   }
 
+  #===============================================
+  # commented out for now, works when startml
+  #  is stand alone functin, does not as
+  #  part of package. Potential solves: something
+  #  to do with methods package or versions of
+  #  dependencies
   # set variable type for proper auto options
-  if(y_type == "discrete") {
-    train[,y] <- as.factor(train[,y])
-    valid[,y] <- as.factor(valid[,y])
-    test[,y] <- as.factor(test[,y])
-  } else {
-    train[,y] <- as.numeric(train[,y])
-    valid[,y] <- as.numeric(valid[,y])
-    test[,y] <- as.numeric(test[,y])
-  }
+  #if(y_type == "discrete") {
+  #  train[,y] <- as.factor(train[,y])
+  #  valid[,y] <- as.factor(valid[,y])
+  #  test[,y] <- as.factor(test[,y])
+  #} else {
+  #  train[,y] <- as.numeric(train[,y])
+  #  valid[,y] <- as.numeric(valid[,y])
+  #  test[,y] <- as.numeric(test[,y])
+  #}
+  #===============================================
+
+  #==============================================
+  # other fix is considering removing y_type argument
+  #  in favor of doing this during data prep outside
+  #  startml.
+  #==============================================
 
   all_models <- autotrain(train = train,
                                 valid = valid,
