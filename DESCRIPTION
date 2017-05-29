@@ -17,7 +17,6 @@ Depends: R (>= 3.1.0),
   gridExtra,
   plotly,
   tsne, 
-  methods, 
   htmlwidgets,
   h2o
 License: GPL 3

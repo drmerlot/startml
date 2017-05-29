@@ -104,7 +104,7 @@ startml <-  function(labeled_data,
     valid[,y] <- as.factor(valid[,y])
     test[,y] <- as.factor(test[,y])
   } else {
-    train[,y] <- as.numeric(substitute(train[,y]))
+    train[,y] <- as.numeric(train[,y])
     valid[,y] <- as.numeric(valid[,y])
     test[,y] <- as.numeric(test[,y])
   }
