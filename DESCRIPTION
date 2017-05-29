@@ -12,7 +12,6 @@ Description: Get started on training optimization and ensembles with popular mac
   boost to some early success, inspiring more effort towards building a valuable knowledge and skill set.
 Depends: R (>= 3.1.0)
 Imports: 
-  h2o,
   ggplot2,
   reshape2,
   plyr,
@@ -20,7 +19,8 @@ Imports:
   plotly,
   tsne, 
   methods, 
-  htmlwidgets
+  htmlwidgets,
+  h2o,
 License: GPL 3
 Encoding: UTF-8
 LazyData: true
