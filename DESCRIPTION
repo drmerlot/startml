@@ -1,6 +1,6 @@
 Package: startml
 Type: Package
-Title: Get started on training optimization and ensembles with popular machine learning algorithms powered by h2o
+Title: Start doing machine learning with training optimization and ensembles of popular machine learning algorithms powered by scalable implementations in h2o
 Version: 0.1.0
 Author: Andrew R Sommerlot <andy.sommerlot@gmail.com>
 Maintainer: Andrew R Sommerlot <andy.sommerlot@gmail.com>
