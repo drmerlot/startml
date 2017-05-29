@@ -1,5 +1,24 @@
-#==================================================================
-### Train gbm models
+#' gbm_autogrid
+#'
+#' gbm_autogrid is a wrapper employing built-in settings to run grid search hyper parameter optimizations on gradient boosted machine algorithm.
+#'
+#' @param train H2O frame object containing labeled data for model training.
+#' No Default.
+#' @param valid H2O frame object containing labeled data for model validation.
+#' No Default.
+#' @param y Character object of length 1 identifying the column name of the target variable. No Default.
+#' @param x Character object of length 1 or more identifying the column name(s) of the input variables. No Default.
+#' @param folds Character object defining number of folds for xval. Default is NULL and currently is not implemented.
+#' @param gbm_runtime_secs Numeric object defining total number of seconds the hyper parameter grid search will run.
+#' @param gbm_stopping_rounds Numeric object defining maximum number of training rounds an individual deep learning model not improving will continue to run. Default is 10.
+#' @param gbm_stopping_tolerance Numeric object which sets the mimmum loss funciton improvement for a training iteration to be considered an improvement. Defulat is 1E-5.
+#' @param gbm_min_depth Numeric object which sets the mimmum loss funciton improvement for a training iteration to be considered an improvement. Defulat is 1E-5.
+#' @param gbm_max_depth Numeric object which sets the maximum tree depth for all gbm models. Defulat is 7.
+#' @param grid_strategy Character object default and only current supported option is "randomDiscrete"
+#' @param eval_metric Character object defining evaluation metric for training. Defualt is "AUTO" and uses built-in H2O automatic choice for target data type.
+#' @param wd Character object defining file path where dl_models folder will be created and deep learning models saved. Defaults to current working directory.
+#' @return List object containing H2O model objects. Additionally saves h2o models as re-loadable text files in wd/gbm_models folder.
+#' @export
 gbm_autogrid <- function(train,
                          valid,
                          y,
@@ -13,7 +32,7 @@ gbm_autogrid <- function(train,
                          gbm_stopping_rounds = 10,
                          gbm_stopping_tolerance = 1e-5,
                          grid_strategy = "RandomDiscrete") {
-  
+
   cat("Training Gradient Boosting Models\n")
   #============================================================
   # needs to be reviewed for smart values and changable...
@@ -39,9 +58,9 @@ gbm_autogrid <- function(train,
     stopping_rounds =  gbm_stopping_rounds,
     stopping_tolerance = gbm_stopping_tolerance,
     stopping_metric = eval_metric,
-    seed = 1234 # needs to be changable 
+    seed = 1234 # needs to be changable
   )
-  
+
   # needs be removed first for iterating within same session
   h2o.rm("gbm")
   gbm_random_grid <- h2o.grid(algorithm = "gbm",
@@ -50,7 +69,7 @@ gbm_autogrid <- function(train,
                               y = y,
                               training_frame = train,
                               validation_frame = valid,
-                              ntrees = 4000, # has to be adjustable 
+                              ntrees = 4000, # has to be adjustable
                               hyper_params = gbm_parameter_search,
                               search_criteria = gbm_search_criteria,
                               seed = 1234)

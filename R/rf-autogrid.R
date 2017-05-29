@@ -1,14 +1,30 @@
-#==================================================================
-## Train rf models
+#' rf_autogrid
+#'
+#' rf_autogrid is a wrapper employing built-in settings to run grid search hyper parameter optimizations on the random forest algorithm.
+#'
+#' @param train H2O frame object containing labeled data for model training.
+#' No Default.
+#' @param valid H2O frame object containing labeled data for model validation.
+#' No Default.
+#' @param y Character object of length 1 identifying the column name of the target variable. No Default.
+#' @param x Character object of length 1 or more identifying the column name(s) of the input variables. No Default.
+#' @param folds Character object defining number of folds for xval. Default is NULL and currently is not implemented.
+#' @param rf_runtime_secs Numeric object defining total number of seconds the hyper parameter grid search will run.
+#' @param rf_stopping_rounds Numeric object defining maximum number of training rounds an individual deep learning model not improving will continue to run. Default is 10.
+#' @param rf_stopping_tolerance Numeric object which sets the mimmum loss funciton improvement for a training iteration to be considered an improvement. Defulat is 1E-5.
+#' @param rf_min_depth Numeric object which sets the minimum tree depth for all random forest models. Defaut is 1.
+#' @param rf_max_depth Numeric object which sets the maximum tree depth for all random forest models. Defaut is 7.
+#' @param grid_strategy Character object default and only current supported option is "randomDiscrete"
+#' @param eval_metric Character object defining evaluation metric for training. Defualt is "AUTO" and uses built-in H2O automatic choice for target data type.
+#' @param wd Character object defining file path where dl_models folder will be created and deep learning models saved. Defaults to current working directory.
+#' @return List object containing H2O model objects. Additionally saves h2o models as re-loadable text files in wd/rf_models folder.
+#' @export
 rf_autogrid <- function(train,
                         valid,
                         y,
-                        x, 
+                        x,
                         eval_metric = "AUTO",
                         wd = getwd(),
-                        validation_type = "SharedHoldout", #need to add the others
-                        percent_valid_holdout = 20,
-                        percent_test_holdout = 20,
                         folds = NULL,
                         rf_min_depth = 1,
                         rf_max_depth = 7,
@@ -48,7 +64,7 @@ rf_autogrid <- function(train,
                              validation_frame = valid,
                              ntrees = 4000, # must be changable
                              seed = 1234) # must change
-  
+
   #================================================
   #rf_grid <- h2o.getGrid("rf")
 

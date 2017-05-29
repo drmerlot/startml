@@ -1,5 +1,11 @@
-#===============================================
-# get validation metrics from models
+#' select_models
+#'
+# Gets validation metrics from a list of h2o models.
+#'
+#' @param model_list List object of H2O frames containing h2o model objects. No Default.
+#' @param eval_metric Character object one of logloss, MSE, RMSE, MAE, AUC, or mean_per_class_error.
+#' @return List object same length as model_list containing performance of each model on validation data with selected metric.
+#' @export
 valid_metric <- function(model_list, eval_metric) {
   if(eval_metric == "logloss") {
     metric <- lapply(model_list, h2o.logloss, valid = TRUE)

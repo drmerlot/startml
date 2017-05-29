@@ -1,5 +1,10 @@
-# small function needed for qplot 
-# finding the x y for text labels in traning histories
+#' hist_text
+#'
+#' Internal function used in plotting mlblob objects. Gets model id from h2o model object
+#' @param id_final Character Model Id.
+#' @param hist_melted data.frame object contianing long form training history of H2O model.
+#' @return Character object Model id.
+#' @export
 hist_text <- function(id_final, hist_melted) {
   sub <- hist_melted[hist_melted$variable %in% id_final,]
   lab_x <- max(sub$iteration)

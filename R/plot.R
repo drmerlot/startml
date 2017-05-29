@@ -1,6 +1,10 @@
-# Plot regression models ==========================
-# this adds ggplot2 dependency making the future package
-#   need gpl3 license.
+#' plot
+#'
+#' Masked from graphics. Summary plot of mlblob object.
+#'
+#' @param mlout mlblob object from output of startml function.
+#' @return None. Plots graphic to device.
+#' @export
 plot <- function(mlout) { suppressWarnings(
   if(class(mlout)[1] == "mlblob") {
     if(class(mlout@models[[1]]) == "H2OBinomialModel") {
@@ -99,4 +103,3 @@ plot <- function(mlout) { suppressWarnings(
     plot(mlout)
   }
 )}
-

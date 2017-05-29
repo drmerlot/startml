@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' even_lengths\n#'\n#' Small, internal function needed for plotting. Not intended for direct use.\n#'\n#' @param train_rmse List object contiaing model performance numbers. No Default.\n#' @export\neven_lengths <- function(train_rmse) {\n  max_length <- max(unlist(lapply(train_rmse, length)))\n  train_hist <- lapply(train_rmse, paste_nas, longest = max_length)\n  train_hist\n}\n",
+    "created" : 1496013374105.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1139479894",
+    "id" : "31B8BC80",
+    "lastKnownWriteTime" : 1496000329,
+    "last_content_update" : 1496000329,
+    "path" : "C:/Users/Andy/Desktop/r-package/startml/R/even-lengths.R",
+    "project_path" : "R/even-lengths.R",
+    "properties" : {
+    },
+    "relative_order" : 23,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

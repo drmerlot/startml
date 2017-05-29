@@ -1,5 +1,23 @@
-#===============================================================================
-# Train Deep learning models
+#' dl_autogrid
+#'
+#' dl_autogrid is a wrapper employing built-in settings to run grid search hyper parameter optimizations on deep learning (dl_ algorithms)
+#'
+#' @param train H2O frame object containing labeled data for model training.
+#' No Default.
+#' @param valid H2O frame object containing labeled data for model validation.
+#' No Default.
+#' @param y Character object of length 1 identifying the column name of the target variable. No Default.
+#' @param x Character object of length 1 or more identifying the column name(s) of the input variables. No Default.
+#' @param folds Character object defining number of folds for xval. Default is NULL and currently is not implemented.
+#' @param deeplearning_runtime_secs Numeric object defining total number of seconds the hyper parameter grid search will run.
+#' @param deeplearning_stopping_rounds Numeric object defining maximum number of training rounds an individual deep learning model not improving will continue to run. Default is 10.
+#' @param deeplearning_stopping_tolerance Numeric object which sets the mimmum loss funciton improvement for a training iteration to be considered an improvement. Defulat is 1E-5.
+#' @param deeplearning_adaptive_rate Boolean, if TRUE ADELTA is used to control learning rate if FALSE than normal rate controls can be used.
+#' @param grid_strategy Character object default and only current supported option is "randomDiscrete"
+#' @param eval_metric Character object defining evaluation metric for training. Defualt is "AUTO" and uses built-in H2O automatic choice for target data type.
+#' @param wd Character object defining file path where dl_models folder will be created and deep learning models saved. Defaults to current working directory.
+#' @return List object containing H2O model objects. Additionally saves h2o models as re-loadable text files in wd/dl_models folder.
+#' @export
 dl_autogrid <- function(train,
                         valid,
                         y,
@@ -25,20 +43,20 @@ dl_autogrid <- function(train,
                                              "TanhWithDropout",
                                              "MaxoutWithDropout"),
                               hidden = list(c(200,200,200),
-                                            c(512,512,512), 
-                                            c(32,32,32), 
+                                            c(512,512,512),
+                                            c(32,32,32),
                                             c(64, 64, 64)),
                               input_dropout_ratio = c(0, 0.05, 0.1),
-                              hidden_dropout_ratios = list(c(0, 0, 0), 
-                                                           c(0.1, 0.1, 0.1), 
-                                                           c(0.2, 0.2, 0.2), 
+                              hidden_dropout_ratios = list(c(0, 0, 0),
+                                                           c(0.1, 0.1, 0.1),
+                                                           c(0.2, 0.2, 0.2),
                                                            c(0.5, 0.5, 0.5)),
                               l1= c(1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 0),
                               l2= c(1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 0),
                               max_w2= c(10, 20, 40),
                               epsilon = c(1e-10, 1e-8, 1e-6, 1e-4),
                               rho = c(0.97, 0.98, 0.98))
-  
+
   #========================================================
   # set variable type for proper auto options
   if(deeplearning_adaptive_rate == TRUE) {
@@ -53,7 +71,7 @@ dl_autogrid <- function(train,
                             stopping_rounds = deeplearning_stopping_rounds,
                             stopping_tolerance = deeplearning_stopping_tolerance,
                             seed = 1234) # needs to be changable
-                             
+
   # run the grid
   # needs be removed first for iterating within same session
   h2o.rm("dl")

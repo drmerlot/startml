@@ -1,4 +1,14 @@
-#===============================================
+#' select_models
+#'
+#' Caculate performance metrics from models on new data. Depends on Metrics package.
+#' @param prediction_list List object of H2O frames containing predictions.
+#' No Default.
+#' @param test H2O frame object containing labeled data for model evaluation.
+#' No Default.
+#' @param eval_metric Character object one of logloss, MSE, RMSE, MAE, AUC, or mean_per_class_error.
+#' @param y Character object of length 1 identifying the column name of the target variable. No Default.
+#' @return List object same length as prediction_list containing performance of each model on test input with selected metric.
+#' @export
 # get test holdout metrics from models # depends on Metrics package for now
 test_metric_h2o <- function(prediction_list, test, eval_metric, y) {
   if(eval_metric == "AUC" | eval_metric == "logloss") {

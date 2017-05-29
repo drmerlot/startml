@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' load_models\n#'\n#' Loads saved text file h2o models into R workspace and h2o instance\n#' @param path Character object of file path to folder containing one or more saved h2o model files.\n#' @return List object of h2o model objects\n#' @export\nload_models <- function(path) {\n  all_model_files <- list.files(path, full.names = TRUE)\n  all_models  <- sapply(all_model_files, function(m) h2o.loadModel(m))\n  all_models\n}\n",
+    "created" : 1496009461684.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2267106341",
+    "id" : "8A952F6E",
+    "lastKnownWriteTime" : 1496009669,
+    "last_content_update" : 1496009669319,
+    "path" : "C:/Users/Andy/Desktop/r-package/startml/R/load-models.R",
+    "project_path" : "R/load-models.R",
+    "properties" : {
+    },
+    "relative_order" : 15,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
