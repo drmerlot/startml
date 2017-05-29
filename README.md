@@ -9,6 +9,14 @@ How this happens is by providing tools for automatically building many models, h
 
 It might be for you if: You want to do machine learning, you are excited to learn new things, you are focused on the fastest path to creating value, and you are (a little) impatient. 
 
-*startml is currently in the process of becoming an R package
+# Install 
+startml is an R package currently hosted here on github. 
+You can install it with devtools from this repository
 
+If you don't have devtools, then in an R instance or Rstudio:
+install.packages(devtools)
+library(devtools) 
 
+Then install startml: 
+install_github("andrewsommerlot/startml")
+library(startml)
