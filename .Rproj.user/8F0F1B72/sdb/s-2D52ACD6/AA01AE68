@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' top_models\n#'\n#' Selects best n models by performance threshold\n#'\n#' @param sorted_models Data frame object indexing all models sorted by decreasing performance. No Default.\n#' @param model_list List object of H2O frames containing h2o model objects.\n#' No Default.\n#' @param number_top_models Numeric object indicating number of top models to return. Defualt is 10. If number entered is greater than number of model, whole model list is returned.\n#' @return List object same length as number_top_models containing top performing h2o models from model_list.\n#' @export\ntop_models <- function(sorted_models, model_list, number_top_models = 10) {\n  all_top_models <- model_list[sorted_models$model_list_num[1:number_top_models]]\n  all_top_models\n}\n",
+    "created" : 1496012698199.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2314605201",
+    "id" : "AA01AE68",
+    "lastKnownWriteTime" : 1496013170,
+    "last_content_update" : 1496013170509,
+    "path" : "C:/Users/Andy/Desktop/r-package/startml/R/top-models.R",
+    "project_path" : "R/top-models.R",
+    "properties" : {
+    },
+    "relative_order" : 21,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

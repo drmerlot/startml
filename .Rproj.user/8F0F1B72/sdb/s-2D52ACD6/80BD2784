@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' select_models\n#'\n# Gets validation metrics from a list of h2o models.\n#'\n#' @param model_list List object of H2O frames containing h2o model objects. No Default.\n#' @param eval_metric Character object one of logloss, MSE, RMSE, MAE, AUC, or mean_per_class_error.\n#' @return List object same length as model_list containing performance of each model on validation data with selected metric.\n#' @export\nvalid_metric <- function(model_list, eval_metric) {\n  if(eval_metric == \"logloss\") {\n    metric <- lapply(model_list, h2o.logloss, valid = TRUE)\n  } else if(eval_metric == \"MSE\") {\n    metric <- lapply(model_list, h2o.mse, valid = TRUE)\n  } else if(eval_metric == \"RMSE\") {\n    metric <- lapply(model_list, h2o.rmse, valid = TRUE)\n  } else if(eval_metric == \"MAE\") {\n    metric <- lapply(model_list, h2o.mae, valid = TRUE)\n  } else if(eval_metric == \"AUC\") {\n    metric <- lapply(model_list, h2o.auc, valid = TRUE)\n  } else if(eval_metric == \"mean_per_class_error\") {\n    metric <- lapply(model_list, h2o.mean_per_class_error, valid = TRUE)\n  }else if(eval_metric == \"RMSLE\") {\n    metric <- lapply(model_list, h2o.rmsle, valid = TRUE)\n  } else {\n    stop(\"Choose an eval metric: logloss, MSE, RMSE, MAE, AUC, mean_per_class_error\")\n  }\n  metric\n}\n",
+    "created" : 1496013007664.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "271883752",
+    "id" : "80BD2784",
+    "lastKnownWriteTime" : 1496013350,
+    "last_content_update" : 1496013350737,
+    "path" : "C:/Users/Andy/Desktop/r-package/startml/R/valid-metric.R",
+    "project_path" : "R/valid-metric.R",
+    "properties" : {
+    },
+    "relative_order" : 22,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

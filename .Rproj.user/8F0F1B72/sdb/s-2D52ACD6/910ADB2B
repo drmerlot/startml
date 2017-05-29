@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' get_model_id\n#'\n#' Internal function used in plotting mlblob objects. Gets model id from h2o model object\n#' @param x h2o model. No Default.\n#' @return Character object Model id.\n#' @export\nget_model_id <- function(x) {\n  model_id <- x@model_id\n  model_id\n}\n",
+    "created" : 1496009253857.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3506055092",
+    "id" : "910ADB2B",
+    "lastKnownWriteTime" : 1496009310,
+    "last_content_update" : 1496009310775,
+    "path" : "C:/Users/Andy/Desktop/r-package/startml/R/get-model-id.R",
+    "project_path" : "R/get-model-id.R",
+    "properties" : {
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

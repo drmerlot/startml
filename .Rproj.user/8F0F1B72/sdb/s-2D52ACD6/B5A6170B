@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' get_ids\n#'\n#' Internal function used in plotting mlblob objects. Gets list of model ids from mlblob object.\n#'\n#' @param x model from mlblob. No Default.\n#' @return Validation history of the model defined by input\n#' @export\nget_ids <- function(x) {\n  x@model$id\n}\n",
+    "created" : 1496009119392.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3403187478",
+    "id" : "B5A6170B",
+    "lastKnownWriteTime" : 1496009192,
+    "last_content_update" : 1496009192050,
+    "path" : "C:/Users/Andy/Desktop/r-package/startml/R/get-ids.R",
+    "project_path" : "R/get-ids.R",
+    "properties" : {
+    },
+    "relative_order" : 11,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
