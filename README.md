@@ -13,9 +13,9 @@ It might be for you if: You want to do machine learning, you are excited to lear
 
 # Install 
 startml is an R package currently hosted here on github. 
-You can install it with devtools from this repository
+You can install it with devtools from this repository.
 
-If you don't have devtools, then in an R instance or Rstudio:
+If you don't have devtools already, then in an R instance or Rstudio:
 
     # First get devtools
     install.packages("devtools")
