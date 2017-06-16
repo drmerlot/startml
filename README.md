@@ -1,6 +1,8 @@
 # startml = start machine learning 
 Start doing machine learning with training optimization and ensembles of popular machine learning algorithms. Powered by the scalable implenentations of powerful algoriths provided by h2o. 
 
+<img src="pics/overview.png" width="600">
+
 Why startml? Anyone who really wants to build machine learning models and apply them in a valuable way to real-word problems can with the help of open source technology. 
 
 What startml does is speed up the learning-through-doing process for new comers.
