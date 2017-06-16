@@ -100,6 +100,6 @@ plot <- function(mlout) { suppressWarnings(
       grid.arrange(p_history, p_order, p_target, p_xy, ncol = 2, nrow = 2)
     }
   } else {
-    plot(mlout)
+    graphics::plot(mlout)
   }
 )}
