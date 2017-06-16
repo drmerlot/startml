@@ -1,4 +1,4 @@
-#' select_models
+#' test_metric
 #'
 #' Caculate performance metrics from models on new data. Depends on Metrics package.
 #' @param prediction_list List object of H2O frames containing predictions.
@@ -10,7 +10,7 @@
 #' @return List object same length as prediction_list containing performance of each model on test input with selected metric.
 #' @export
 # get test holdout metrics from models # depends on Metrics package for now
-test_metric_h2o <- function(prediction_list, test, eval_metric, y) {
+test_metric <- function(prediction_list, test, eval_metric, y) {
   if(eval_metric == "AUC" | eval_metric == "logloss") {
     predictions <- lapply(prediction_list, function(x)x[,3])
   } else {

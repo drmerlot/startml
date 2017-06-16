@@ -11,6 +11,7 @@ Description: Get started on training optimization and ensembles with popular mac
   helping you put some miles on your CPU doing machine learning, and hopefully, giving you a little 
   boost to some early success, inspiring more effort towards building a valuable knowledge and skill set.
 Depends: R (>= 3.1.0),
+  Metrics,
   ggplot2,
   reshape2,
   plyr,
