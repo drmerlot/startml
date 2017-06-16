@@ -17,12 +17,10 @@ You can install it with devtools from this repository
 
 If you don't have devtools, then in an R instance or Rstudio:
 
-install.packages("devtools")
-
-library(devtools) 
-
-Then install startml: 
-
-install_github("andrewsommerlot/startml")
-
-library(startml)
+    # First get devtools
+    install.packages("devtools")
+    library(devtools) 
+    
+    # Then install startml: 
+    install_github("andrewsommerlot/startml")
+    library(startml)
