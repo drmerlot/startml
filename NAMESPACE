@@ -2,6 +2,7 @@
 
 export(autotrain)
 export(dl_autogrid)
+export(ensemble)
 export(even_lengths)
 export(gbm_autogrid)
 export(get_frame)
