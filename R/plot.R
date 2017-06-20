@@ -71,6 +71,7 @@ plot <- function(mlout) { suppressWarnings(
         ylab("Density") +
         ggtitle(paste(y, "in Labeled Data Splits")) +
         theme(axis.text.x=element_text(angle = -45, hjust = 0))
+      #============================================================
       # make the xy plot ======================
       for(i in 1:length(mlout@predict_test)) {
         names(mlout@predict_test[[i]]) <- ids_final[[i]]
@@ -78,26 +79,44 @@ plot <- function(mlout) { suppressWarnings(
       xy_df <- do.call(h2o.cbind, mlout@predict_test)
       xy_df$labeled <- mlout@test[[1]][,y]
       xy_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
-      p_xy <- ggplot(xy_melted) +
-        geom_point(aes(x = labeled, y = value, color = variable), alpha = 0.5) +
-        geom_point(aes(x = labeled, y = labeled), color = "black", alpha = 0.5) +
-        guides(color = FALSE) +
-        xlab(paste("Labeled",  y)) +
-        ylab(paste("Predicted", y)) +
-        ggtitle("Labels vs Predictions on Test")
-      # the order plot ======================
+      # currently replaced with order plot
+      #p_xy <- ggplot(xy_melted) +
+      #  geom_point(aes(x = labeled, y = value, color = variable), alpha = 0.5) +
+      #  geom_point(aes(x = labeled, y = labeled), color = "black", alpha = 0.5) +
+      #  guides(color = FALSE) +
+      #  xlab(paste("Labeled",  y)) +
+      #  ylab(paste("Predicted", y)) +
+      #  ggtitle("Labels vs Predictions on Test")
+      #============================================================
+      # the order plot
       pred_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
       p_order <- ggplot(pred_melted[order(pred_melted$labeled),]) +
         geom_point(aes(x = seq(1, nrow(pred_melted)), y = value,
                        color = variable), alpha = 0.6) +
-        geom_point(aes(x = seq(1, nrow(pred_melted)), y = labeled),
+        geom_point(aes(x = seq(1, nrow(pred_melted)), y = labeled, fill = "black"),
                    size = .8) +
+        scale_fill_manual(name = "", values = c("black" = "black"), labels = c("Labeled\nValues")) +
         scale_color_discrete(guide=FALSE) +
         ylab(y) +
         xlab(paste("Index: Ordered By Asending", y)) +
         ggtitle("Labels and Predictions on Test")
-      # Plot everything on the grid
-      grid.arrange(p_history, p_order, p_target, p_xy, ncol = 2, nrow = 2)
+      #=============================================================
+      # get a bar chart of performance
+      # save performance metics
+      metrics <- unlist(test_metric(mlout@predict_test, test = mlout@test[[1]], y = mlout@y, eval_metric = mlout@models[[1]]@allparameters$stopping_metric))
+      performance = data.frame(model = unlist(ids_final), test_performance = metrics)
+      p_performance <- ggplot(performance) +
+        geom_bar(aes(x = reorder(model, test_performance), y = test_performance, fill = model),
+                 stat = "identity") +
+        geom_hline(aes(yintercept = summary(metrics)[3][[1]], color = "black")) +
+        ylab(mlout@models[[1]]@allparameters$stopping_metric) +
+        xlab("") +
+        scale_color_manual(name = "", values = c("black" = "black"), labels = c("Median\nPerformance")) +
+        scale_fill_discrete(guide=FALSE) +
+        ggtitle("Model Performance on Test") +
+        theme(axis.text.x=element_text(angle = -45, hjust = 0))
+          #print out the grid
+      grid.arrange(p_history, p_order, p_target, p_performance, ncol = 2, nrow = 2)
     }
   } else {
     graphics::plot(mlout)
