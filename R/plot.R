@@ -130,10 +130,10 @@ plot <- function(mlout) { suppressWarnings(
       if(mlout@ensemble_model != "no ensemble in this mlblob") {
         ensemble_metric <- unlist(test_metric(mlout@ensemble_test, test = mlout@test[[1]], y = mlout@y, eval_metric = mlout@models[[1]]@allparameters$stopping_metric))
         ensemble_performance <- data.frame(model = "ensemble", test_performance = ensemble_metric)
-        p_performance <- ggplot() +
-          geom_bar(data = ensemble_performance, aes(x = reorder(model, test_performance),
+        p_performance <- ggplot(performance) +
+          geom_bar(data = ensemble_performance, aes(x = model,
                    y = test_performance), fill = "dark red", stat = "identity") +
-          geom_bar(data = performance, aes(x = reorder(model, test_performance),
+          geom_bar(aes(x = reorder(model, test_performance),
                    y = test_performance, fill = model), stat = "identity") +
           geom_hline(aes(yintercept = summary(metrics)[3][[1]], color = "black")) +
           ylab(mlout@models[[1]]@allparameters$stopping_metric) +
