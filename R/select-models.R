@@ -34,7 +34,7 @@ select_models <- function(model_list,
       predictions_subset <- lapply(prediction_list, function(x)x[,3])
       predictions <- h2o.cbind(predictions_subset)
     } else {
-    predictions <- h2o.cbind(prediction_list)
+      predictions <- h2o.cbind(prediction_list)
     }
   correlations <- h2o.cor(predictions)
   names(correlations) <- seq(1:length(model_list))
@@ -43,25 +43,25 @@ select_models <- function(model_list,
     function(x) any(x > correlation_threshold))]))]
   }
   if(length(low_cor_models) == 0){
-    min_message <- min(correlations[correlations != 0])
-    warning(paste("No models selected, minimum correlation available is",
+    min_message <- min(apply(correlations, 2, max))
+    warning(paste("No models selected, minimum correlation available",
                   min_message, "\nReturning models unconstrained by correlation\n"))
     low_cor_models <- model_list
   } else {
     if(is.null(eval_threshold)) {
-      low_cor_models
+      return_models <- low_cor_models
     } else {
-      if(!exists("prediction_list")) {
-        prediction_list <- predict_blob(test, model_list)
-      }
+      prediction_list <- predict_blob(test, low_cor_models)
       metrics <- unlist(test_metric(prediction_list, test = test, y = y, eval_metric = eval_metric))
       keep_models <- low_cor_models[eval_fun(metrics, eval_threshold)]
       if(length(keep_models) == 0){
         warning("eval_threshold too optimistic, returning models unconstrained by performance")
-        low_cor_models
+        return_models <- low_cor_models
       } else {
-        keep_models
+        return_models <- keep_models
       }
     }
   }
+  return_models
 }
+
