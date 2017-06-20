@@ -75,10 +75,43 @@ plot <- function(mlout) { suppressWarnings(
       # make the xy plot ======================
       for(i in 1:length(mlout@predict_test)) {
         names(mlout@predict_test[[i]]) <- ids_final[[i]]
-        }
+      }
       xy_df <- do.call(h2o.cbind, mlout@predict_test)
       xy_df$labeled <- mlout@test[[1]][,y]
-      xy_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
+      if(mlout@ensemble_model != "no ensemble in this mlblob") {
+        ensemble_test <- mlout@ensemble_test[[1]]
+        xy_df$ensemble <- ensemble_test
+        pred_melted <- melt(as.data.frame(xy_df), c(ncol(xy_df) - 1, ncol(xy_df)))
+        # the order plot
+        p_order <- ggplot(pred_melted[order(pred_melted$labeled),]) +
+          geom_point(aes(x = seq(1, nrow(pred_melted)), y = value,
+                         color = variable), alpha = 0.6) +
+          geom_point(aes(x = seq(1, nrow(pred_melted)), y = labeled, shape = "labeled"),
+                     color = "black", size = 1) +
+          geom_point(aes(x = seq(1, nrow(pred_melted)), y = ensemble, shape = "ensemble"),
+                     color = "dark red", size = 1) +
+          scale_shape_manual(name = "", values = c("labeled" = 18, "ensemble" = 15),
+                            labels = c("Ensemble", "Labeled")) +
+          scale_color_discrete(guide=FALSE) +
+          guides(shape = guide_legend(override.aes = list(color = c("dark red", "black"),
+                                                          size = 1.2))) +
+          ylab(y) +
+          xlab(paste("Index: Ordered By Asending", y)) +
+          ggtitle("Labels and Predictions on Test")
+      } else {
+        pred_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
+        # the order plot
+        p_order <- ggplot(pred_melted[order(pred_melted$labeled),]) +
+          geom_point(aes(x = seq(1, nrow(pred_melted)), y = value,
+                         color = variable), alpha = 0.6) +
+          geom_point(aes(x = seq(1, nrow(pred_melted)), y = labeled, fill = "black"),
+                     size = .8) +
+          scale_fill_manual(name = "", values = c("black" = "black"), labels = c("Labeled\nValues")) +
+          scale_color_discrete(guide=FALSE) +
+          ylab(y) +
+          xlab(paste("Index: Ordered By Asending", y)) +
+          ggtitle("Labels and Predictions on Test")
+      }
       # currently replaced with order plot
       #p_xy <- ggplot(xy_melted) +
       #  geom_point(aes(x = labeled, y = value, color = variable), alpha = 0.5) +
@@ -88,34 +121,41 @@ plot <- function(mlout) { suppressWarnings(
       #  ylab(paste("Predicted", y)) +
       #  ggtitle("Labels vs Predictions on Test")
       #============================================================
-      # the order plot
-      pred_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
-      p_order <- ggplot(pred_melted[order(pred_melted$labeled),]) +
-        geom_point(aes(x = seq(1, nrow(pred_melted)), y = value,
-                       color = variable), alpha = 0.6) +
-        geom_point(aes(x = seq(1, nrow(pred_melted)), y = labeled, fill = "black"),
-                   size = .8) +
-        scale_fill_manual(name = "", values = c("black" = "black"), labels = c("Labeled\nValues")) +
-        scale_color_discrete(guide=FALSE) +
-        ylab(y) +
-        xlab(paste("Index: Ordered By Asending", y)) +
-        ggtitle("Labels and Predictions on Test")
       #=============================================================
       # get a bar chart of performance
       # save performance metics
       metrics <- unlist(test_metric(mlout@predict_test, test = mlout@test[[1]], y = mlout@y, eval_metric = mlout@models[[1]]@allparameters$stopping_metric))
-      performance = data.frame(model = unlist(ids_final), test_performance = metrics)
-      p_performance <- ggplot(performance) +
-        geom_bar(aes(x = reorder(model, test_performance), y = test_performance, fill = model),
+      performance <- data.frame(model = unlist(ids_final), test_performance = metrics)
+      # if there is an ensemble
+      if(mlout@ensemble_model != "no ensemble in this mlblob") {
+        ensemble_metric <- unlist(test_metric(mlout@ensemble_test, test = mlout@test[[1]], y = mlout@y, eval_metric = mlout@models[[1]]@allparameters$stopping_metric))
+        ensemble_performance <- data.frame(model = "ensemble", test_performance = ensemble_metric)
+        p_performance <- ggplot() +
+          geom_bar(data = ensemble_performance, aes(x = reorder(model, test_performance),
+                   y = test_performance), fill = "dark red", stat = "identity") +
+          geom_bar(data = performance, aes(x = reorder(model, test_performance),
+                   y = test_performance, fill = model), stat = "identity") +
+          geom_hline(aes(yintercept = summary(metrics)[3][[1]], color = "black")) +
+          ylab(mlout@models[[1]]@allparameters$stopping_metric) +
+          xlab("") +
+          scale_color_manual(name = "", values = c("black" = "black"), labels = c("Median\nPerformance")) +
+          scale_fill_discrete(guide=FALSE) +
+          ggtitle("Model Performance on Test") +
+          theme(axis.text.x=element_text(angle = -45, hjust = 0))
+      }
+      else {
+        p_performance <- ggplot(performance) +
+          geom_bar(aes(x = reorder(model, test_performance), y = test_performance, fill = model),
                  stat = "identity") +
-        geom_hline(aes(yintercept = summary(metrics)[3][[1]], color = "black")) +
-        ylab(mlout@models[[1]]@allparameters$stopping_metric) +
-        xlab("") +
-        scale_color_manual(name = "", values = c("black" = "black"), labels = c("Median\nPerformance")) +
-        scale_fill_discrete(guide=FALSE) +
-        ggtitle("Model Performance on Test") +
-        theme(axis.text.x=element_text(angle = -45, hjust = 0))
-          #print out the grid
+          geom_hline(aes(yintercept = summary(metrics)[3][[1]], color = "black")) +
+          ylab(mlout@models[[1]]@allparameters$stopping_metric) +
+          xlab("") +
+          scale_color_manual(name = "", values = c("black" = "black"), labels = c("Median\nPerformance")) +
+          scale_fill_discrete(guide=FALSE) +
+          ggtitle("Model Performance on Test") +
+          theme(axis.text.x=element_text(angle = -45, hjust = 0))
+      }
+      #print out the grid
       grid.arrange(p_history, p_order, p_target, p_performance, ncol = 2, nrow = 2)
     }
   } else {
