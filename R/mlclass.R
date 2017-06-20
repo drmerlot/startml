@@ -12,7 +12,7 @@ setClass("mlblob", slots = c(models = "list",
                              predict_valid = "list",
                              predict_test = "list",
                              predict_newdata = "list",
-                             index = "data.frame",
+                             performance = "data.frame",
                              y = "character",
                              x = "character",
                              output = "data.frame"))
