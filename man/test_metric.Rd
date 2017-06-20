@@ -7,11 +7,9 @@
 test_metric(prediction_list, test, eval_metric, y)
 }
 \arguments{
-\item{prediction_list}{List object of H2O frames containing predictions.
-No Default.}
+\item{prediction_list}{List object of H2O frames containing predictions.}
 
-\item{test}{H2O frame object containing labeled data for model evaluation.
-No Default.}
+\item{test}{H2O frame object containing labeled data for model evaluation.}
 
 \item{eval_metric}{Character object one of logloss, MSE, RMSE, MAE, AUC, or mean_per_class_error.}
 
