@@ -43,13 +43,13 @@ rf_autogrid <- function(train,
                              nbins = 2^seq(4,10,1),
                              nbins_cats = 2^seq(4,12,1),
                              min_split_improvement = c(0,1e-8,1e-6,1e-4),
+                             ntrees = seq(100, 10000, by = 500),
                              histogram_type = c("UniformAdaptive","QuantilesGlobal","RoundRobin"))
 
   rf_search_criteria <- list(strategy = grid_strategy,
                             max_runtime_secs = rf_runtime_secs,
                             stopping_rounds = rf_stopping_rounds,
                             stopping_tolerance = rf_stopping_tolerance,
-                            stopping_metric = eval_metric,
                             seed = 1234)
 
   # needs be removed first for iterating within same session
@@ -62,8 +62,8 @@ rf_autogrid <- function(train,
                              y = y,
                              training_frame = train,
                              validation_frame = valid,
-                             ntrees = 4000, # must be changable
-                             seed = 1234) # must change
+                             stopping_metric = eval_metric,
+                             seed = 1234)
 
   #================================================
   #rf_grid <- h2o.getGrid("rf")

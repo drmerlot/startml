@@ -57,7 +57,6 @@ gbm_autogrid <- function(train,
     max_runtime_secs = gbm_runtime_secs,
     stopping_rounds =  gbm_stopping_rounds,
     stopping_tolerance = gbm_stopping_tolerance,
-    stopping_metric = eval_metric,
     seed = 1234 # needs to be changable
   )
 
@@ -69,7 +68,7 @@ gbm_autogrid <- function(train,
                               y = y,
                               training_frame = train,
                               validation_frame = valid,
-                              ntrees = 4000, # has to be adjustable
+                              stopping_metric = eval_metric,
                               hyper_params = gbm_parameter_search,
                               search_criteria = gbm_search_criteria,
                               seed = 1234)
