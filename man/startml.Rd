@@ -8,9 +8,9 @@ startml(labeled_data, newdata, y, x = NULL, label_id = NULL, y_type,
   algorithms = c("deeplearning", "randomForest", "gbm"),
   eval_metric = "AUTO", validation_type = "shared_holdout",
   percent_valid_holdout = 10, percent_test_holdout = 10,
-  runtime_secs = 10, split_seed = NULL, number_top_models = NULL,
-  eval_threshold = NULL, correlation_threshold = 0,
-  return_dataframe = FALSE, wd = getwd())
+  runtime_secs = 10, split_seed = NULL, trim = FALSE,
+  number_top_models = NULL, eval_threshold = NULL,
+  correlation_threshold = 0, return_dataframe = FALSE, wd = getwd())
 }
 \arguments{
 \item{labeled_data}{H2O frame object containing labeled data for model training.
@@ -40,6 +40,8 @@ No Default.}
 \item{runtime_secs}{Character Object which sets the length of time each grid search will run. Defaults to 20, thus the default runtime is 20 sec * (length of algorimths) = 1 minute.}
 
 \item{split_seed}{Random seed for splitting labeled data into train, validation, and test components. Currently, startml only supports random sampling splits, this argument sets the random seed for these splits, making the data set separation process reproducible. Since this is a "naive" random split, labeled data should be shuffled before hand.}
+
+\item{trim}{Boolean. When TRUE, output is trimmed with eval_threshold, correlation_threshold, or number_top_models. When FALSE, all models are returned. Default FALSE.}
 
 \item{number_top_models}{Numeric object indicating number of top models to return. Defualt is 10. If number entered is greater than number of model, whole model list is returned.}
 
