@@ -16,6 +16,7 @@
 #' @param grid_strategy Character object default and only current supported option is "randomDiscrete"
 #' @param eval_metric Character object defining evaluation metric for training. Defualt is "AUTO" and uses built-in H2O automatic choice for target data type.
 #' @param wd Character object defining file path where dl_models folder will be created and deep learning models saved. Defaults to current working directory.
+#' @param grid_id Character. Set grid name in h2o platform. Defualts to "dl" only used in ensemble function.
 #' @return List object containing H2O model objects. Additionally saves h2o models as re-loadable text files in wd/dl_models folder.
 #' @export
 dl_autogrid <- function(train,
@@ -29,7 +30,8 @@ dl_autogrid <- function(train,
                         deeplearning_stopping_rounds = 10,
                         deeplearning_stopping_tolerance = 1e-5,
                         deeplearning_adaptive_rate = TRUE,
-                        grid_strategy = "RandomDiscrete") {
+                        grid_strategy = "RandomDiscrete",
+                        grid_id = "dl") {
 
   cat("Training Deep Learning Models\n")
   #==============================================
@@ -76,7 +78,7 @@ dl_autogrid <- function(train,
   # needs be removed first for iterating within same session
   h2o.rm("dl")
   dl_random_grid <- h2o.grid(algorithm="deeplearning",
-                             grid_id = "dl", # makes repeat run impossible
+                             grid_id = grid_id,
                              training_frame=train,
                              validation_frame = valid,
                              x = x,
@@ -93,7 +95,7 @@ dl_autogrid <- function(train,
   #dl_grid <- h2o.getGrid("dl")
 
   # write out the models to disk
-  dl_path <- paste(wd, "/dl_models", sep = "")
+  dl_path <- paste(wd, "/", grid_id, "_models", sep = "")
   dl_model_files <- sapply(dl_random_grid@model_ids, function(m) h2o.saveModel(h2o.getModel(m), path = dl_path, force = TRUE))
 
   # print out alert
