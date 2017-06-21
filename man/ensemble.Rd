@@ -6,7 +6,7 @@
 \usage{
 ensemble(mlout, algorithm = "mean", validation = "xval",
   percent_reduce = NULL, reduce_method = NULL, keep_features = FALSE,
-  grid_search = FLASE, runtime_secs = 60)
+  grid_search = FALSE, runtime_secs = 60, eval_metric = "AUTO")
 }
 \arguments{
 \item{mlout}{Inputs an mlblob object containing multiple models from the result of the startml function}
