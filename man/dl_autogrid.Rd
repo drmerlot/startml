@@ -8,7 +8,8 @@ dl_autogrid(train, valid, y, x, eval_metric = "AUTO", wd = getwd(),
   folds = NULL, deeplearning_runtime_secs = 10,
   deeplearning_stopping_rounds = 10,
   deeplearning_stopping_tolerance = 1e-05,
-  deeplearning_adaptive_rate = TRUE, grid_strategy = "RandomDiscrete")
+  deeplearning_adaptive_rate = TRUE, grid_strategy = "RandomDiscrete",
+  grid_id = "dl")
 }
 \arguments{
 \item{train}{H2O frame object containing labeled data for model training.
@@ -36,6 +37,8 @@ No Default.}
 \item{deeplearning_adaptive_rate}{Boolean, if TRUE ADELTA is used to control learning rate if FALSE than normal rate controls can be used.}
 
 \item{grid_strategy}{Character object default and only current supported option is "randomDiscrete"}
+
+\item{grid_id}{Character. Set grid name in h2o platform. Defualts to "dl" only used in ensemble function.}
 }
 \value{
 List object containing H2O model objects. Additionally saves h2o models as re-loadable text files in wd/dl_models folder.
