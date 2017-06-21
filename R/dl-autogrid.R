@@ -87,7 +87,7 @@ dl_autogrid <- function(train,
                              epochs=1000, #needs to change
                              overwrite_with_best_model = TRUE,
                              adaptive_rate = deeplearning_adaptive_rate,
-                             hyper_params = dl_parameter_search,
+                             hyper_params = hyper_params,
                              search_criteria = dl_search_criteria,
                              stopping_metric = eval_metric,
                              seed = 1234) # needs to be changable
