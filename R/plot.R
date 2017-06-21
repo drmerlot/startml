@@ -87,14 +87,14 @@ plot <- function(mlout) { suppressWarnings(
           geom_point(aes(x = seq(1, nrow(pred_melted)), y = value,
                          color = variable), alpha = 0.6) +
           geom_point(aes(x = seq(1, nrow(pred_melted)), y = labeled, shape = "labeled"),
-                     color = "black", size = 1) +
+                     color = "black", size = 1.4) +
           geom_point(aes(x = seq(1, nrow(pred_melted)), y = ensemble, shape = "ensemble"),
-                     color = "dark red", size = 1) +
+                     color = "dark red", alpha = 0.8, size = 1) +
           scale_shape_manual(name = "", values = c("labeled" = 18, "ensemble" = 15),
                             labels = c("Ensemble", "Labeled")) +
           scale_color_discrete(guide=FALSE) +
           guides(shape = guide_legend(override.aes = list(color = c("dark red", "black"),
-                                                          size = 1.2))) +
+                                                          size = 1.6))) +
           ylab(y) +
           xlab(paste("Index: Ordered By Asending", y)) +
           ggtitle("Labels and Predictions on Test")
@@ -129,12 +129,12 @@ plot <- function(mlout) { suppressWarnings(
       # if there is an ensemble
       if(mlout@ensemble_model != "no ensemble in this mlblob") {
         ensemble_metric <- unlist(test_metric(mlout@ensemble_test, test = mlout@test[[1]], y = mlout@y, eval_metric = mlout@models[[1]]@allparameters$stopping_metric))
-        ensemble_performance <- data.frame(model = "ensemble", test_performance = ensemble_metric)
+        ensemble_performance <- data.frame(model = mlout@ensemble_model[[1]]@model_id, test_performance = ensemble_metric)
         p_performance <- ggplot(performance) +
           geom_bar(data = ensemble_performance, aes(x = model,
-                   y = test_performance), fill = "dark red", stat = "identity") +
+                                                    y = test_performance), fill = "dark red", stat = "identity") +
           geom_bar(aes(x = reorder(model, test_performance),
-                   y = test_performance, fill = model), stat = "identity") +
+                       y = test_performance, fill = model), stat = "identity") +
           geom_hline(aes(yintercept = summary(metrics)[3][[1]], color = "black")) +
           ylab(mlout@models[[1]]@allparameters$stopping_metric) +
           xlab("") +
