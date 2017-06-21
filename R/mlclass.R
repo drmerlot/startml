@@ -20,4 +20,5 @@ setClass("mlblob", slots = c(models = "list",
                              performance = "data.frame",
                              y = "character",
                              x = "character",
+                             label_id = "character",
                              output = "data.frame"))

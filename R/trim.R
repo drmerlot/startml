@@ -75,6 +75,7 @@ trim <- function(mlout, eval_metric, eval_threshold = NULL, correlation_threshol
                  performance = index,
                  y = y,
                  x = x,
+                 label_id = mlout@label_id,
                  output = data.frame(mlblob.output = "No R object Returned, set return_dataframe to TRUE"))
   } else {
     warning("Returning R object currently in the works")
