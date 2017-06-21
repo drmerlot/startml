@@ -34,6 +34,7 @@ ensemble <- function(mlout,
       ensemble_test <- h2o.cbind(mlout@predict_test)
       ensemble_newdata <- h2o.cbind(mlout@predict_newdata)
       if(!is.null(percent_reduce)) {
+        cat("\nReducing dimention of weak learner prediction matrix by ~", "%")
         ensemble_train_pca <- h2o.prcomp(ensemble_train,
                                         transform = "STANDARDIZE",
                                         k = round(length(mlout@x)*(1 - percent_reduce / 100)),
