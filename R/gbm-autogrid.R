@@ -47,23 +47,22 @@ gbm_autogrid <- function(train,
     nbins = 2^seq(4,10,1),
     nbins_cats = 2^seq(4,12,1),
     min_split_improvement = c(0,1e-8,1e-6,1e-4),
-    learn_rate = c(0.1, 0.01, 0.001),
+    learn_rate = c(0.01, 0.001, 0.0001),
     learn_rate_annealing = c(0.1, 0.5, .99), ## check this for reasonableness
-    histogram_type = c("UniformAdaptive","QuantilesGlobal","RoundRobin")
-  )
+    histogram_type = c("UniformAdaptive","QuantilesGlobal","RoundRobin"))
 
   gbm_search_criteria = list(
     strategy = grid_strategy,
     max_runtime_secs = gbm_runtime_secs,
     stopping_rounds =  gbm_stopping_rounds,
     stopping_tolerance = gbm_stopping_tolerance,
-    seed = 1234 # needs to be changable
+    seed = 1234
   )
 
   # needs be removed first for iterating within same session
   h2o.rm("gbm")
   gbm_random_grid <- h2o.grid(algorithm = "gbm",
-                              grid_id = "gbm", # this causes failure on repreat runs, but automatic names give huge model ids
+                              grid_id = "gbm",
                               x = x,
                               y = y,
                               training_frame = train,
@@ -71,6 +70,7 @@ gbm_autogrid <- function(train,
                               stopping_metric = eval_metric,
                               hyper_params = gbm_parameter_search,
                               search_criteria = gbm_search_criteria,
+                              ntrees = 10000, # needs to be changable
                               seed = 1234)
   #====================================
   #gbm_grid <- h2o.getGrid("gbm") # already returns grid
