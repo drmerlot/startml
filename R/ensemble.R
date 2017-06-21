@@ -19,6 +19,7 @@ ensemble <- function(mlout,
                      grid_search = FALSE,
                      runtime_secs = 60,
                      eval_metric = "AUTO") {
+  h2o.rm("ensemble")
   ml_ensemble <- mlout
   if(algorithm == "mean") {
     weak_predictions <- h2o.cbind(mlout@predict_test)
@@ -34,10 +35,10 @@ ensemble <- function(mlout,
       ensemble_test <- h2o.cbind(mlout@predict_test)
       ensemble_newdata <- h2o.cbind(mlout@predict_newdata)
       if(!is.null(percent_reduce)) {
-        cat("\nReducing dimention of weak learner prediction matrix by ~", "%")
+        cat("\nReducing dimention of weak learner prediction matrix by ~",percent_reduce, "%\n")
         ensemble_train_pca <- h2o.prcomp(ensemble_train,
                                         transform = "STANDARDIZE",
-                                        k = round(length(mlout@x)*(1 - percent_reduce / 100)),
+                                        k = round(h2o.ncol(ensemble_train)*((100 - percent_reduce)/100)),
                                         impute_missing = TRUE)
         pca_inputs <- predict(ensemble_train_pca, ensemble_train, impute_missing = TRUE)
         pca_inputs[, mlout@y] <- mlout@train[[1]][, mlout@y]
@@ -62,14 +63,80 @@ ensemble <- function(mlout,
         ensemble_id <- mlout@label_id
         ensemble_x <- x <- setdiff(names(ensemble_train), y)
         ensemble_x <- ensemble_x[-which(ensemble_x == ensemble_id)]
+        #==========================================================================
+        # this one is pre-set to be more cautious
         # run another grid search
-        ens_grid <- dl_autogrid(train = ensemble_train,
-                    valid = ensemble_valid,
-                    y = ensemble_y,
-                    x = ensemble_x,
-                    eval_metric = eval_metric,
-                    deeplearning_runtime_secs = runtime_secs,
-                    grid_id = "ensemble")
+        cat("Training Deep Learning Models\n")
+        deeplearning_adaptive_rate = TRUE
+        deeplearning_stopping_rounds = 10
+        deeplearning_stopping_tolerance = 1e-5
+        grid_id <- "ensemble"
+        #==============================================
+        dl_parameter_search <- list(rate= c(1e-9, 1e-8, 1e-7, 1e-6),
+                                    rate_annealing = c(1e-12, 1e-9, 1e-6),
+                                    momentum_start = c(0.8, 0.9),
+                                    momentum_stable = c(0.95, 0.99),
+                                    momentum_ramp = 1/seq(1e-12, 1e-9, 1e-6),
+                                    score_duty_cycle = c(0.02, 0.05, 0.1),
+                                    activation = c("RectifierWithDropout",
+                                                   "TanhWithDropout",
+                                                   "MaxoutWithDropout"),
+                                    hidden = list(c(200,200,200),
+                                                  c(512,512,512),
+                                                  c(64, 64, 64),
+                                                  c(round(length(ensemble_x) + length(ensemble_x)*1.2),
+                                                    round(length(ensemble_x) + length(ensemble_x)*2),
+                                                    round(length(ensemble_x) + length(ensemble_x)*.5))),
+
+                                    input_dropout_ratio = c(0, 0.05, 0.1),
+                                    hidden_dropout_ratios = list(c(0.1, 0.1, 0.1),
+                                                                 c(0.2, 0.2, 0.2),
+                                                                 c(0.5, 0.5, 0.5)),
+                                    l1= c(1e-5, 1e-4, 1e-3),
+                                    l2= c(1e-5, 1e-4, 1e-3),
+                                    max_w2= c(10, 20, 40),
+                                    epsilon = c(1e-10, 1e-8, 1e-6, 1e-4),
+                                    rho = c(0.97, 0.98, 0.98))
+
+        #========================================================
+        # set variable type for proper auto options
+        if(deeplearning_adaptive_rate == TRUE) {
+          hyper_params <- dl_parameter_search[seq(7,15)]
+        }
+        if(deeplearning_adaptive_rate == FALSE) {
+          hyper_params <- dl_parameter_search[seq(1:13)]
+        }
+
+        dl_search_criteria = list(strategy = "RandomDiscrete",
+                                  max_runtime_secs = runtime_secs,
+                                  stopping_rounds = deeplearning_stopping_rounds,
+                                  stopping_tolerance = deeplearning_stopping_tolerance,
+                                  seed = 1234) # needs to be changable
+
+        # run the grid
+        # needs be removed first for iterating within same session
+        h2o.rm("dl")
+        dl_random_grid <- h2o.grid(algorithm = "deeplearning",
+                                   grid_id = grid_id,
+                                   training_frame = ensemble_train,
+                                   validation_frame = ensemble_valid,
+                                   x = ensemble_x,
+                                   y = ensemble_y,
+                                   standardize = TRUE,
+                                   epochs=1000, #needs to change
+                                   overwrite_with_best_model = TRUE,
+                                   adaptive_rate = deeplearning_adaptive_rate,
+                                   hyper_params = hyper_params,
+                                   search_criteria = dl_search_criteria,
+                                   stopping_metric = eval_metric,
+                                   seed = 1234) # needs to be changable
+
+        dl_path <- paste(wd, "/", grid_id, "_models", sep = "")
+        dl_model_files <- sapply(dl_random_grid@model_ids, function(m) h2o.saveModel(h2o.getModel(m), path = dl_path, force = TRUE))
+
+        # print out alert
+        cat(paste("Deep Learning Models Saved To:\n", dl_path, "\n\n"))
+
         model_paths <- NULL
         model_paths <- c(model_paths, paste(wd, "/ensemble_models", sep = ""))
         all_models <- load_models(model_paths)
