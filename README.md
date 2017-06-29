@@ -1,5 +1,5 @@
 # startml = start machine learning 
-Start doing machine learning with training optimization and ensembles of popular machine learning algorithms. Powered by the scalable implenentations of powerful algoriths provided by h2o. 
+Start doing machine learning with training optimization and ensembles of popular machine learning algorithms. Powered by the scalable implenentations of algoriths provided by h2o. 
 
 <img src="pics/overview.png" width="800">
 
