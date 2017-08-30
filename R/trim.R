@@ -1,4 +1,5 @@
-#' trim
+#' temp trim
+
 #'
 #' @param mlout mlblob object from output of startml function.
 #' @param eval_metric Character object defining evaluation metric for training. No default, use "logloss," "MSE," "RMSE," "MAE," "AUC," or "mean_per_class_error."
@@ -9,8 +10,14 @@
 #' @return mlblob object of selected models from original input.
 #' Trim serves as an option to select only models which meet certain criteria after the startml function is run. Trim inputs the mlblob object from startml and outputs an mlblob object containing only the slected models.
 #' @export
-trim <- function(mlout, eval_metric, eval_threshold = NULL, correlation_threshold = NULL, number_top_models = NULL, return_dataframe = FALSE) {
-  # ===================================================================
+
+trim <- function(mlout,
+                     eval_metric,
+                     eval_threshold = NULL,
+                     correlation_threshold = NULL,
+                     number_top_models = NULL,
+                     return_dataframe = FALSE) {
+
   # define the data sets, only works with shared holdout
   all_models <- mlout@models
   labeled_data <- mlout@labeled_data[[1]]
@@ -37,48 +44,22 @@ trim <- function(mlout, eval_metric, eval_threshold = NULL, correlation_threshol
                                      eval_threshold = eval_threshold,
                                      y = y,
                                      correlation_threshold = correlation_threshold)
-  }
-  #=================================================================
-  # predict with the models or selected models.
-  cat("\nSaving Train Predictions with Selected Models\n")
-  train_predictions <- predict_blob(test = train, selected_models)
-  cat("\nSaving Valid Predictions with Selected Models\n")
-  valid_predictions <- predict_blob(test = valid, selected_models)
-  cat("\nSaving Test Predictions with Selected Models\n")
-  test_predictions <- predict_blob(test = test, selected_models)
-  cat("\nPredicting on New Data with Selected Models\n")
-  newdata_predictions <- predict_blob(test = new_data, selected_models)
 
-  # needs work.
-  # make the index dataframe, trivially all 1s for shared holout
-  index = data.frame(beta = "Not finished yet")
 
-  # =================================================
-  if(return_dataframe == FALSE) {
-    # build the output object of new class mlblob
-    mlout_trim <- new("mlblob",
-                 models = selected_models,
-                 labeled_data = list(labeled_data),
-                 train = list(train),
-                 valid = list(valid),
-                 test = list(test),
-                 new_data = list(new_data),
-                 predict_train = train_predictions,
-                 predict_valid = valid_predictions,
-                 predict_test = test_predictions,
-                 predict_newdata = newdata_predictions,
-                 ensemble_model = list("no ensemble in this mlblob"),
-                 ensemble_train = list("no ensemble in this mlblob"),
-                 ensemble_valid = list("no ensemble in this mlblob"),
-                 ensemble_test = list("no ensemble in this mlblob"),
-                 ensemble_newdata = list("no ensemble in this mlblob"),
-                 performance = index,
-                 y = y,
-                 x = x,
-                 label_id = mlout@label_id,
-                 output = data.frame(mlblob.output = "No R object Returned, set return_dataframe to TRUE"))
-  } else {
-    warning("Returning R object currently in the works")
+  ml_delete <- mlout
+  ids <- sapply(mlout@models, get_ids)
+  ids_split <- sapply(names(ids), strsplit, split = "/")
+  ids_final <- sapply(ids_split, `[`, length(ids_split[[1]]))
+  delete <- which(ids_final == model_id)
+  # delete the model and its results
+  ml_delete@models <- ml_delete@models[-delete]
+  ml_delete@predict_train <- ml_delete@predict_train[-delete]
+  ml_delete@predict_valid <- ml_delete@predict_valid[-delete]
+  ml_delete@predict_test <- ml_delete@predict_test[-delete]
+  ml_delete@predict_newdata <- ml_delete@predict_newdata[-delete]
+  ml_delete
   }
-  mlout_trim
+
+
+
 }
