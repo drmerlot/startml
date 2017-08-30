@@ -45,20 +45,24 @@ trim <- function(mlout,
                                      y = y,
                                      correlation_threshold = correlation_threshold)
 
-
-  ml_delete <- mlout
+  }
+  ml_keep <- mlout
   ids <- sapply(mlout@models, get_ids)
   ids_split <- sapply(names(ids), strsplit, split = "/")
   ids_final <- sapply(ids_split, `[`, length(ids_split[[1]]))
-  delete <- which(ids_final == model_id)
-  # delete the model and its results
-  ml_delete@models <- ml_delete@models[-delete]
-  ml_delete@predict_train <- ml_delete@predict_train[-delete]
-  ml_delete@predict_valid <- ml_delete@predict_valid[-delete]
-  ml_delete@predict_test <- ml_delete@predict_test[-delete]
-  ml_delete@predict_newdata <- ml_delete@predict_newdata[-delete]
-  ml_delete
-  }
+
+  del_ids <- sapply(selected_models, get_ids)
+  del_ids_split <- sapply(names(del_ids), strsplit, split = "/")
+  del_ids_final <- sapply(del_ids_split, `[`, length(del_ids_split[[1]]))
+
+  keep <- which(ids_final %in% del_ids_final)
+  # keep the model and its results
+  ml_keep@models <- ml_keep@models[keep]
+  ml_keep@predict_train <- ml_keep@predict_train[keep]
+  ml_keep@predict_valid <- ml_keep@predict_valid[keep]
+  ml_keep@predict_test <- ml_keep@predict_test[keep]
+  ml_keep@predict_newdata <- ml_keep@predict_newdata[keep]
+  ml_keep
 
 
 
