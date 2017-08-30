@@ -2,7 +2,7 @@
 % Please edit documentation in R/trim.R
 \name{trim}
 \alias{trim}
-\title{trim}
+\title{temp trim}
 \usage{
 trim(mlout, eval_metric, eval_threshold = NULL,
   correlation_threshold = NULL, number_top_models = NULL,
@@ -26,5 +26,5 @@ mlblob object of selected models from original input.
 Trim serves as an option to select only models which meet certain criteria after the startml function is run. Trim inputs the mlblob object from startml and outputs an mlblob object containing only the slected models.
 }
 \description{
-trim
+temp trim
 }

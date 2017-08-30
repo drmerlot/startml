@@ -4,10 +4,10 @@
 \alias{get_hist}
 \title{get_hist}
 \usage{
-get_hist(x)
+get_hist(model)
 }
 \arguments{
-\item{x}{model from mlblob. No Default.}
+\item{model}{h2o model from mlblob. No Default.}
 }
 \value{
 Validation history of the model defined by input
