@@ -24,7 +24,7 @@ trim <- function(mlout,
   train <- mlout@train[[1]]
   test <- mlout@test[[1]]
   valid <- mlout@valid[[1]]
-  new_data <- mlout@new_data[[1]]
+  newdata <- mlout@newdata[[1]]
   y <- mlout@y
   x <- mlout@x
   #====================================================================
