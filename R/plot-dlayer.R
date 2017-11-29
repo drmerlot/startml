@@ -20,7 +20,7 @@ plot_dlayer <- function(model,
                         label,
                         dimentions = 2,
                         max_points = 1000,
-                        tsne_iter = 1000,
+                        tsne_iter = 500,
                         wd = getwd()) {
   samp <- sample(x = 1:nrow(vis_data), size = max_points)
   samp <- samp[order(samp)]
@@ -30,7 +30,7 @@ plot_dlayer <- function(model,
   cat("Getting hidden layer values from DL model\n")
   dlayer <- as.data.frame(h2o.deepfeatures(model, dat, layer = layer))
   if(dimentions == 2) {
-    cat("Starting tSNE dimentionality reduction")
+    cat("Starting tSNE dimentionality reduction\n")
     dat_tsne <- tsne(X = dlayer,
                      k = dimentions,
                      initial_dims = dim(dlayer)[2],
@@ -48,7 +48,7 @@ plot_dlayer <- function(model,
       theme_classic(base_size =  12)
     p
   } else if(dimentions == 3) {
-    cat("Starting tSNE dimentionality reduction")
+    cat("Starting tSNE dimentionality reduction\n")
     dat_tsne <- tsne(X = dlayer,
                      k = dimentions,
                      initial_dims = dim(dlayer)[2],
@@ -63,8 +63,8 @@ plot_dlayer <- function(model,
                           yaxis = list(title = "tSNE Dim 2"),
                           zaxis = list(title = "tSNE Dim 3")))
   cat(paste("3D plot is saved as html page:\n", wd, "/", "dl-hidden-layer-plot.html\n",
-            "open it there with your browser", sep = ""))
-  saveWidget(as_widget(p), "dl-hidden-layer-plot.html")
+            "open it there with your browser. Currently not working in firefox.\n", sep = ""))
+  htmltools::save_html(as_widget(p), "dl-hidden-layer-plot.html")
   } else {
     stop("Dimentions must be set to 2 or 3")
   }
