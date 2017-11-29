@@ -20,6 +20,7 @@ plot <- function(mlout) { suppressWarnings(
       iter <- seq(0, longest - 1, by = 1)
       colnames(hist_df) <- ids_final
       hist_df$iteration <- iter
+      hist_df <- data.frame(sapply(hist_df, as.numeric))
       hist_melted <- melt(hist_df, ncol(hist_df))
       hist_melted <- hist_melted[-which(is.na(hist_melted$value)),]
       ids_final <- as.list(ids_final)
