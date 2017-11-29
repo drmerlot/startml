@@ -35,7 +35,7 @@
 # 'train = A list of h2o frame objects contianing the train component for each model from the labeled data split.
 # 'valid = A list of h2o frame objects contianing the validation component for each model from the labeled data split if cross validation is not used.
 # 'test = A list of h2o frame objects contianing the test component for each model from the labeled data split.
-# 'new_data = an h2o frame object equivalent to the input new_data input object.
+# 'newdata = an h2o frame object equivalent to the input newdata input object.
 # 'predict_train = A list of h2o frame objects contianing all model predictions on the trainng data.
 # 'predict_valid = A list of h2o frame objects contianing all model predictions on the validation data.
 # 'predict_test = A list of h2o frame objects contianing all model predictions on the test data.
@@ -162,7 +162,7 @@ startml <-  function(labeled_data,
   cat("\nSaving Test Predictions with Selected Models\n")
   test_predictions <- predict_blob(test = test, selected_models)
   cat("\nPredicting on New Data with Selected Models\n")
-  newdata_predictions <- predict_blob(test = new_data, selected_models)
+  newdata_predictions <- predict_blob(test = newdata, selected_models)
 
   # needs work.
   # make the index dataframe, trivially all 1s for shared holout
@@ -177,7 +177,7 @@ startml <-  function(labeled_data,
                   train = list(train),
                   valid = list(valid),
                   test = list(test),
-                  new_data = list(new_data),
+                  newdata = list(newdata),
                   predict_train = train_predictions,
                   predict_valid = valid_predictions,
                   predict_test = test_predictions,
