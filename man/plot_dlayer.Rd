@@ -6,7 +6,7 @@
 Visualize hidden layer activations in a deep learning model with dimentionality reduction and variable labels}
 \usage{
 plot_dlayer(model, vis_data, layer, label, dimentions = 2,
-  max_points = 1000, tsne_iter = 1000, wd = getwd())
+  max_points = 1000, tsne_iter = 500, wd = getwd())
 }
 \arguments{
 \item{model}{H2O model object containing labeled data for model training.

@@ -6,7 +6,8 @@
 \usage{
 ensemble(mlout, algorithm = "mean", validation = "xval",
   percent_reduce = NULL, reduce_method = NULL, keep_features = FALSE,
-  grid_search = FALSE, runtime_secs = 60, eval_metric = "AUTO")
+  grid_search = FALSE, runtime_secs = 60, eval_metric = "AUTO",
+  wd = getwd())
 }
 \arguments{
 \item{mlout}{Inputs an mlblob object containing multiple models from the result of the startml function}
@@ -24,6 +25,8 @@ ensemble(mlout, algorithm = "mean", validation = "xval",
 \item{grid_search}{Boolean. Use a grid search to find optimal hyper parameter when algorithm is "gbm" randomForest" or "deepleaning." Default is FALSE, this can greatly increase the ensemble training time but may result in a superior parameter.}
 
 \item{runtime_secs}{Numeric. Number of seconds to run grid search when grid_search is TRUE. Default is 60 seconds.}
+
+\item{wd}{directory to save ensemble. Default is current directory}
 }
 \value{
 mlblob object including ensemble model, ensemble input data set, and predictions on train, valid, test, and new_data sets if available.
