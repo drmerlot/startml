@@ -8,6 +8,7 @@
 #' @param grid_search Boolean. Use a grid search to find optimal hyper parameter when algorithm is "gbm" randomForest" or "deepleaning." Default is FALSE, this can greatly increase the ensemble training time but may result in a superior parameter.
 #' @param runtime_secs Numeric. Number of seconds to run grid search when grid_search is TRUE. Default is 60 seconds.
 #' @param validation Character. Type of validation to be used in ensemble, can be "random_holdout" or "xval" for cross validation. Default is xval.
+#' @param wd directory to save ensemble. Default is current directory
 #' @return mlblob object including ensemble model, ensemble input data set, and predictions on train, valid, test, and new_data sets if available.
 #' @export
 ensemble <- function(mlout,
@@ -18,7 +19,8 @@ ensemble <- function(mlout,
                      keep_features = FALSE,
                      grid_search = FALSE,
                      runtime_secs = 60,
-                     eval_metric = "AUTO") {
+                     eval_metric = "AUTO",
+                     wd = getwd()) {
   h2o.rm("ensemble")
   ml_ensemble <- mlout
   if(algorithm == "mean") {
@@ -56,13 +58,22 @@ ensemble <- function(mlout,
         ensemble_train <- h2o.cbind(mlout@train, pca_train)
         ensemble_valid <- h2o.cbind(mlout@valid, pca_valid)
         ensemble_test <- h2o.cbind(mlout@test, pca_test)
-        ensemble_newdata <- h2o.cbind(mlout@new_data, pca_newdata)
+        ensemble_newdata <- h2o.cbind(mlout@newdata, pca_newdata)
+      } else {
+        ensemble_train <- pca_train
+        ensemble_valid <- pca_valid
+        ensemble_test <- pca_test
+        ensemble_newdata <- pca_newdata
+        #ensemble_test <- h2o.cbind(mlout@test[[1]][, which(names(mlout@test[[1]]) == mlout@y)], pca_test)
+        #ensemble_newdata <- pca_newdata
       }
       if(grid_search == TRUE){
         ensemble_y <- mlout@y
         ensemble_id <- mlout@label_id
-        ensemble_x <- x <- setdiff(names(ensemble_train), y)
-        ensemble_x <- ensemble_x[-which(ensemble_x == ensemble_id)]
+        ensemble_x <- setdiff(names(ensemble_train), ensemble_y)
+
+        # currently only works with
+        #ensemble_x <- setdiff(names(ensemble_x), ensemble_id)
         #==========================================================================
         # this one is pre-set to be more cautious
         # run another grid search
@@ -83,10 +94,11 @@ ensemble <- function(mlout,
                                                    "MaxoutWithDropout"),
                                     hidden = list(c(200,200,200),
                                                   c(512,512,512),
-                                                  c(64, 64, 64),
-                                                  c(round(length(ensemble_x) + length(ensemble_x)*1.2),
-                                                    round(length(ensemble_x) + length(ensemble_x)*2),
-                                                    round(length(ensemble_x) + length(ensemble_x)*.5))),
+                                                  c(64, 64, 64)
+                                                  #c(round(length(ensemble_x) + length(ensemble_x)*1.2),
+                                                   # round(length(ensemble_x) + length(ensemble_x)*2),
+                                                    #round(length(ensemble_x) + length(ensemble_x)*.5))
+                                                  ),
 
                                     input_dropout_ratio = c(0, 0.05, 0.1),
                                     hidden_dropout_ratios = list(c(0.1, 0.1, 0.1),
