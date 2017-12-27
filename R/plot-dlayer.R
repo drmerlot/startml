@@ -37,7 +37,7 @@ plot_dlayer <- function(model,
                      max_iter = tsne_iter)
     vis_label <- as.data.frame(view_label)[,1]
     dat_plot <- data.frame(dat_tsne, vis_label)
-    names(dat_plot) <- c("dl.hl.1", "dl.hl.2", "vis_label")
+    names(dat_plot) <- c("dl.hl.1", "dl.hl.2", label)
     p <- ggplot(dat_plot) +
       geom_point(aes(x = dl.hl.1, y = dl.hl.2, color = vis_label),
                  alpha = 0.7) +
@@ -56,7 +56,7 @@ plot_dlayer <- function(model,
     vis_label <- as.data.frame(view_label)[,1]
 
     dat_plot <- data.frame(dat_tsne, vis_label)
-    names(dat_plot) <- c("dl.hl.1", "dl.hl.2", "dl.hl.3", "vis_label")
+    names(dat_plot) <- c("dl.hl.1", "dl.hl.2", "dl.hl.3", label)
     p <- plot_ly(dat_plot, x = ~dl.hl.1, y = ~dl.hl.2, z = ~dl.hl.3, color = ~vis_label) %>%
       add_markers() %>%
       layout(scene = list(xaxis = list(title = "tSNE Dim 1"),
