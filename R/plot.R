@@ -97,7 +97,7 @@ plot <- function(mlout) { suppressWarnings(
           guides(shape = guide_legend(override.aes = list(color = c("dark red", "black"),
                                                           size = 1.6))) +
           ylab(y) +
-          xlab(paste("Index: Ordered By Asending", y)) +
+          xlab(paste("Index: Ordered By Ascending", y)) +
           ggtitle("Labels and Predictions on Test")
       } else {
         pred_melted <- melt(as.data.frame(xy_df), ncol(xy_df))
