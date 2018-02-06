@@ -25,9 +25,9 @@
 #' @param wd Character object defining file path where resulting modeling will be saved. Defualts to current working directory.
 #' @param trim Boolean. When TRUE, output is trimmed with eval_threshold, correlation_threshold, or number_top_models. When FALSE, all models are returned. Default FALSE.
 #' @param number_top_models Numeric object indicating number of top models to return. Defualt is 10. If number entered is greater than number of model, whole model list is returned.
-#' @param eval_threshold Numeric object defining the performance threshold models must meet to be used in prediction. Is minimum for maximization loss function (i.e., AUC) and maximum for minimization loss functions (logloss, MSE, etc). Default is NULL, returns models without performance consideration.
+#' @param eval_threshold Numeric objsect defining the performance threshold models must meet to be used in prediction. Is minimum for maximization loss function (i.e., AUC) and maximum for minimization loss functions (logloss, MSE, etc). Default is NULL, returns models without performance consideration.
 #' @param correlation_threshold Numeric object defining the maximum person correlation allowed in the group of resulting models. If two models show high correlation, the one with surperior performance will be kept and the other dropped. Value ranges from -1 to 1, default is NULL, returning models without correlation considered.
-#' @param return_dataframe Boolean, if TRUE startml will attempt to return a data.frame of the resulting predictions for each new data row. This will only work if the resulting predictions from new data are small enough to be stored in the R workspace. Though, when working with smaller datasets, such as some competitions, this can be very convient. The same object is stored in the H2O space and can be accessed with the name set as the ouput of startml and manipulated with functions from the h2o R package. Default is FALSE.
+#' @param return_dataframe Depricated. Always keep equal to FALSE
 #' @return Object of class mlblob using S4 type. mlblob objects contain all selected models, their predictions on train, validation, test, and new data, and can be plotted using plot() showing a summary of the model group.
 #' Slots are:
 #' models, a list of h2o model objects
@@ -193,7 +193,7 @@ startml <-  function(labeled_data,
                   label_id = label_id,
                   output = data.frame(mlblob.output = "No R object Returned, set return_dataframe to TRUE"))
   } else {
-    warning("Returning R object in currently in the works")
+    warning("return dataframe depricated, set to FALSE")
   }
   mlout
 }

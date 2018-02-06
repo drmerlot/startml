@@ -45,11 +45,11 @@ No Default.}
 
 \item{number_top_models}{Numeric object indicating number of top models to return. Defualt is 10. If number entered is greater than number of model, whole model list is returned.}
 
-\item{eval_threshold}{Numeric object defining the performance threshold models must meet to be used in prediction. Is minimum for maximization loss function (i.e., AUC) and maximum for minimization loss functions (logloss, MSE, etc). Default is NULL, returns models without performance consideration.}
+\item{eval_threshold}{Numeric objsect defining the performance threshold models must meet to be used in prediction. Is minimum for maximization loss function (i.e., AUC) and maximum for minimization loss functions (logloss, MSE, etc). Default is NULL, returns models without performance consideration.}
 
 \item{correlation_threshold}{Numeric object defining the maximum person correlation allowed in the group of resulting models. If two models show high correlation, the one with surperior performance will be kept and the other dropped. Value ranges from -1 to 1, default is NULL, returning models without correlation considered.}
 
-\item{return_dataframe}{Boolean, if TRUE startml will attempt to return a data.frame of the resulting predictions for each new data row. This will only work if the resulting predictions from new data are small enough to be stored in the R workspace. Though, when working with smaller datasets, such as some competitions, this can be very convient. The same object is stored in the H2O space and can be accessed with the name set as the ouput of startml and manipulated with functions from the h2o R package. Default is FALSE.}
+\item{return_dataframe}{Depricated. Always keep equal to FALSE}
 
 \item{wd}{Character object defining file path where resulting modeling will be saved. Defualts to current working directory.}
 }
